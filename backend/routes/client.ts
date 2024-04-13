@@ -40,3 +40,46 @@ router.get('/:clientId', async (req: Request, res: Response) => {
 
     res.json(theClient);
 });
+
+router.put('/:clientId', async (req: Request, res: Response) => {
+    const { name, email, phone, address } = req.body;
+
+    const update = await prisma.client.update({
+        where: {
+            id: parseInt(req.params.clientId)
+        },
+        data: {
+            name,
+            email,
+            phone,
+            address
+        }
+    });
+
+    res.json(update);
+});
+
+router.delete('/:clientId', async (req: Request, res: Response) => {
+
+    const oldClient = await prisma.client.findUnique({
+        where: {
+            id: parseInt(req.params.clientId)
+        }
+    })
+
+    if (!oldClient) {
+        res.status(404).json({
+            error: 'client not found'
+        })
+    }
+
+    await prisma.client.delete({
+        where: {
+            id: parseInt(req.params.clientId)
+        }
+    })
+
+    res.json({
+        message: 'client deleted'
+    })
+})
