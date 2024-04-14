@@ -86,5 +86,4 @@ router.delete('/:userId', async (req: Request, res: Response) => {
     message: 'user deleted'
   })
 })
-
 module.exports = router

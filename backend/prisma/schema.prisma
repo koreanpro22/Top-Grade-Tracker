@@ -9,7 +9,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
@@ -19,7 +19,8 @@ model User {
   name           String?
   password       String
   profilePicture String?
-  role           Role    @default(EMPLOYEE)
+  // role           Role    @default(EMPLOYEE)
+  role           String
   phone          String
   job            Job[]
 }
@@ -52,7 +53,8 @@ model Warrenty {
   createdAt DateTime @default(now())
 }
 
-enum Role {
-  EMPLOYEE
-  BOSS
-}
+
+// enum Role {
+//   EMPLOYEE
+//   BOSS
+// }
