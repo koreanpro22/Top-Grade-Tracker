@@ -1,96 +1,109 @@
 import express, { Request, Response } from "express";
-import {db} from '../src/utils/db.server'
+import { db } from '../src/utils/db.server';
 
-const router = express.Router();
+const warrentyRouter = express.Router();
 
-router.post('/create', async (req: Request, res: Response) => {
-    const { jobId, duration } = req.body;
+warrentyRouter.post('/create', async (req: Request, res: Response) => {
+    try {
+        const { jobId, duration } = req.body;
 
+        const warranty = await db.warrenty.create({
+            data: {
+                duration,
+                jobId
+            }
+        });
 
-    const warrenty = await db.warrenty.create({
-        data: {
-            duration,
-            jobId
-        }
-    });
-
-    res.json(warrenty);
+        res.json(warranty);
+    } catch (error) {
+        console.error("Error creating warranty:", error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
 });
 
-router.post('/getall', async (req: Request, res: Response) => {
-
-    let warrentys = db.warrenty.findMany()
-
-    res.json(warrentys)
-})
-
-router.post('/:warrentyId', async (req: Request, res: Response) => {
-
-    const warrenty = db.warrenty.findUnique({
-        where: {
-            id: parseInt(req.params.warrentyId)
-        }
-    })
-
-    if (!warrenty) {
-        res.status(404).json({
-            error: 'warrenty not found'
-        })
+warrentyRouter.get('/getall', async (req: Request, res: Response) => {
+    try {
+        const warranties = await db.warrenty.findMany();
+        res.json(warranties);
+    } catch (error) {
+        console.error("Error fetching warranties:", error);
+        res.status(500).json({ error: 'Internal server error' });
     }
+});
 
-    res.json(warrenty)
-})
+warrentyRouter.get('/:warrentyId', async (req: Request, res: Response) => {
+    try {
+        const warranty = await db.warrenty.findUnique({
+            where: {
+                id: parseInt(req.params.warrentyId)
+            }
+        });
 
-router.put('/:warrentyId', async (req: Request, res: Response) => {
-
-    const { jobId, duration } = req.body;
-
-    const update = db.warrenty.findUnique({
-        where: {
-            id: parseInt(req.params.warrentyId)
+        if (!warranty) {
+            return res.status(404).json({ error: 'Warranty not found' });
         }
-    })
 
-    if (!update) {
-        res.status(404).json({
-            error: 'warrenty not found'
-        })
+        res.json(warranty);
+    } catch (error) {
+        console.error("Error fetching warranty:", error);
+        res.status(500).json({ error: 'Internal server error' });
     }
+});
 
-    const updated = await db.warrenty.update({
-        where: {
-            id: parseInt(req.params.warrentyId)
-        },
-        data: {
-            duration,
-            jobId
+warrentyRouter.put('/:warrentyId', async (req: Request, res: Response) => {
+    try {
+        const { jobId, duration } = req.body;
+
+        const warranty = await db.warrenty.findUnique({
+            where: {
+                id: parseInt(req.params.warrentyId)
+            }
+        });
+
+        if (!warranty) {
+            return res.status(404).json({ error: 'Warranty not found' });
         }
-    })
 
-    res.json(updated)
-})
+        const updatedWarranty = await db.warrenty.update({
+            where: {
+                id: parseInt(req.params.warrentyId)
+            },
+            data: {
+                duration,
+                jobId
+            }
+        });
 
-router.delete('/:warrentyId', async (req: Request, res: Response) => {
-
-    const oldwarrenty = await db.warrenty.findUnique({
-        where: {
-            id: parseInt(req.params.warrentyId)
-        }
-    })
-
-    if (!oldwarrenty) {
-        res.status(404).json({
-            error: 'warrenty not found'
-        })
+        res.json(updatedWarranty);
+    } catch (error) {
+        console.error("Error updating warranty:", error);
+        res.status(500).json({ error: 'Internal server error' });
     }
+});
 
-    await db.warrenty.delete({
-        where: {
-            id: parseInt(req.params.warrentyId)
+warrentyRouter.delete('/:warrentyId', async (req: Request, res: Response) => {
+    try {
+        const warranty = await db.warrenty.findUnique({
+            where: {
+                id: parseInt(req.params.warrentyId)
+            }
+        });
+
+        if (!warranty) {
+            return res.status(404).json({ error: 'Warranty not found' });
         }
-    })
 
-    res.json({
-        message: 'warrenty deleted'
-    })
-})
+        await db.warrenty.delete({
+            where: {
+                id: parseInt(req.params.warrentyId)
+            }
+        });
+
+        res.json({ message: 'Warranty deleted' });
+    } catch (error) {
+        console.error("Error deleting warranty:", error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+export default warrentyRouter;

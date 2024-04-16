@@ -1,9 +1,10 @@
-const express = require("express");
+import express from "express";
+import userRouter from './user';
+import clientRouter from './client';
+import jobRouter from './job';
+import warrentyRouter from './warrenty';
+
 const router = express.Router();
-const userRouter = require('./user')
-const clientRouter = require('./client')
-const jobRouter = require('./job')
-const warrentyRouter = require('./warrenty')
 
 router.use('/users', userRouter);
 router.use('/clients', clientRouter);
@@ -13,3 +14,5 @@ router.use('/warrenties', warrentyRouter);
 // if (process.env.NODE_ENV === "production") {
 
 // }
+
+export default router;
