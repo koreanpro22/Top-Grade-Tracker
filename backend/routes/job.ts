@@ -1,100 +1,113 @@
 import express, { Request, Response } from "express";
-import {db} from '../src/utils/db.server'
+import { db } from '../src/utils/db.server';
 
-const router = express.Router();
+const jobRouter = express.Router();
 
-router.post('/create', async (req: Request, res: Response) => {
-    const { description, address, clientId, userId } = req.body;
+jobRouter.post('/create', async (req: Request, res: Response) => {
+    try {
+        const { description, address, clientId, userId } = req.body;
 
+        const job = await db.job.create({
+            data: {
+                description,
+                address,
+                clientId: parseInt(clientId),
+                userId
+            }
+        });
 
-    const job = await db.job.create({
-        data: {
-            description,
-            address,
-            clientId: parseInt(clientId),
-            userId: userId
-        }
-    });
-
-    res.json(job);
+        res.json(job);
+    } catch (error) {
+        console.error("Error creating job:", error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
 });
 
-router.post('/getall', async (req: Request, res: Response) => {
-
-    let jobs = db.job.findMany()
-
-    res.json(jobs)
-})
-
-router.post('/:jobId', async (req: Request, res: Response) => {
-
-    const job = db.job.findUnique({
-        where: {
-            id: parseInt(req.params.jobId)
-        }
-    })
-
-    if (!job) {
-        res.status(404).json({
-            error: 'job not found'
-        })
+jobRouter.get('/getall', async (req: Request, res: Response) => {
+    try {
+        const jobs = await db.job.findMany();
+        res.json(jobs);
+    } catch (error) {
+        console.error("Error fetching jobs:", error);
+        res.status(500).json({ error: 'Internal server error' });
     }
+});
 
-    res.json(job)
-})
+jobRouter.get('/:jobId', async (req: Request, res: Response) => {
+    try {
+        const job = await db.job.findUnique({
+            where: {
+                id: parseInt(req.params.jobId)
+            }
+        });
 
-router.put('/:jobId', async (req: Request, res: Response) => {
-
-    const { description, address, clientId, userId } = req.body;
-
-    const update = db.job.findUnique({
-        where: {
-            id: parseInt(req.params.jobId)
+        if (!job) {
+            return res.status(404).json({ error: 'Job not found' });
         }
-    })
 
-    if (!update) {
-        res.status(404).json({
-            error: 'job not found'
-        })
+        res.json(job);
+    } catch (error) {
+        console.error("Error fetching job:", error);
+        res.status(500).json({ error: 'Internal server error' });
     }
+});
 
-    const updated = await db.job.update({
-        where: {
-            id: parseInt(req.params.jobId)
-        },
-        data: {
-            description,
-            address,
-            clientId,
-            userId
+jobRouter.put('/:jobId', async (req: Request, res: Response) => {
+    try {
+        const { description, address, clientId, userId } = req.body;
+
+        const job = await db.job.findUnique({
+            where: {
+                id: parseInt(req.params.jobId)
+            }
+        });
+
+        if (!job) {
+            return res.status(404).json({ error: 'Job not found' });
         }
-    })
 
-    res.json(updated)
-})
+        const updatedJob = await db.job.update({
+            where: {
+                id: parseInt(req.params.jobId)
+            },
+            data: {
+                description,
+                address,
+                clientId: parseInt(clientId),
+                userId
+            }
+        });
 
-router.delete('/:jobId', async (req: Request, res: Response) => {
-
-    const oldJob = await db.job.findUnique({
-        where: {
-            id: parseInt(req.params.JobId)
-        }
-    })
-
-    if (!oldJob) {
-        res.status(404).json({
-            error: 'Job not found'
-        })
+        res.json(updatedJob);
+    } catch (error) {
+        console.error("Error updating job:", error);
+        res.status(500).json({ error: 'Internal server error' });
     }
+});
 
-    await db.job.delete({
-        where: {
-            id: parseInt(req.params.JobId)
+jobRouter.delete('/:jobId', async (req: Request, res: Response) => {
+    try {
+        const job = await db.job.findUnique({
+            where: {
+                id: parseInt(req.params.jobId)
+            }
+        });
+
+        if (!job) {
+            return res.status(404).json({ error: 'Job not found' });
         }
-    })
 
-    res.json({
-        message: 'job deleted'
-    })
-})
+        await db.job.delete({
+            where: {
+                id: parseInt(req.params.jobId)
+            }
+        });
+
+        res.json({ message: 'Job deleted' });
+    } catch (error) {
+        console.error("Error deleting job:", error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+export default jobRouter;
