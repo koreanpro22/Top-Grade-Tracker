@@ -1,14 +1,13 @@
 import express, { Request, Response } from "express";
-import { PrismaClient } from '@prisma/client';
+import {db} from '../src/utils/db.server'
 
-const prisma = new PrismaClient();
 const router = express.Router();
 
 router.post('/create', async (req: Request, res: Response) => {
     const { description, address, clientId, userId } = req.body;
 
 
-    const job = await prisma.job.create({
+    const job = await db.job.create({
         data: {
             description,
             address,
@@ -22,14 +21,14 @@ router.post('/create', async (req: Request, res: Response) => {
 
 router.post('/getall', async (req: Request, res: Response) => {
 
-    let jobs = prisma.job.findMany()
+    let jobs = db.job.findMany()
 
     res.json(jobs)
 })
 
 router.post('/:jobId', async (req: Request, res: Response) => {
 
-    const job = prisma.job.findUnique({
+    const job = db.job.findUnique({
         where: {
             id: parseInt(req.params.jobId)
         }
@@ -48,7 +47,7 @@ router.put('/:jobId', async (req: Request, res: Response) => {
 
     const { description, address, clientId, userId } = req.body;
 
-    const update = prisma.job.findUnique({
+    const update = db.job.findUnique({
         where: {
             id: parseInt(req.params.jobId)
         }
@@ -60,7 +59,7 @@ router.put('/:jobId', async (req: Request, res: Response) => {
         })
     }
 
-    const updated = await prisma.job.update({
+    const updated = await db.job.update({
         where: {
             id: parseInt(req.params.jobId)
         },
@@ -77,7 +76,7 @@ router.put('/:jobId', async (req: Request, res: Response) => {
 
 router.delete('/:jobId', async (req: Request, res: Response) => {
 
-    const oldJob = await prisma.job.findUnique({
+    const oldJob = await db.job.findUnique({
         where: {
             id: parseInt(req.params.JobId)
         }
@@ -89,7 +88,7 @@ router.delete('/:jobId', async (req: Request, res: Response) => {
         })
     }
 
-    await prisma.job.delete({
+    await db.job.delete({
         where: {
             id: parseInt(req.params.JobId)
         }

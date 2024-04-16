@@ -1,14 +1,13 @@
 import express, { Request, Response } from "express";
-import { PrismaClient } from '@prisma/client';
+import {db} from '../src/utils/db.server'
 
-const prisma = new PrismaClient();
 const router = express.Router();
 
 router.post('/create', async (req: Request, res: Response) => {
     const { jobId, duration } = req.body;
 
 
-    const warrenty = await prisma.warrenty.create({
+    const warrenty = await db.warrenty.create({
         data: {
             duration,
             jobId
@@ -20,14 +19,14 @@ router.post('/create', async (req: Request, res: Response) => {
 
 router.post('/getall', async (req: Request, res: Response) => {
 
-    let warrentys = prisma.warrenty.findMany()
+    let warrentys = db.warrenty.findMany()
 
     res.json(warrentys)
 })
 
 router.post('/:warrentyId', async (req: Request, res: Response) => {
 
-    const warrenty = prisma.warrenty.findUnique({
+    const warrenty = db.warrenty.findUnique({
         where: {
             id: parseInt(req.params.warrentyId)
         }
@@ -46,7 +45,7 @@ router.put('/:warrentyId', async (req: Request, res: Response) => {
 
     const { jobId, duration } = req.body;
 
-    const update = prisma.warrenty.findUnique({
+    const update = db.warrenty.findUnique({
         where: {
             id: parseInt(req.params.warrentyId)
         }
@@ -58,7 +57,7 @@ router.put('/:warrentyId', async (req: Request, res: Response) => {
         })
     }
 
-    const updated = await prisma.warrenty.update({
+    const updated = await db.warrenty.update({
         where: {
             id: parseInt(req.params.warrentyId)
         },
@@ -73,7 +72,7 @@ router.put('/:warrentyId', async (req: Request, res: Response) => {
 
 router.delete('/:warrentyId', async (req: Request, res: Response) => {
 
-    const oldwarrenty = await prisma.warrenty.findUnique({
+    const oldwarrenty = await db.warrenty.findUnique({
         where: {
             id: parseInt(req.params.warrentyId)
         }
@@ -85,7 +84,7 @@ router.delete('/:warrentyId', async (req: Request, res: Response) => {
         })
     }
 
-    await prisma.warrenty.delete({
+    await db.warrenty.delete({
         where: {
             id: parseInt(req.params.warrentyId)
         }

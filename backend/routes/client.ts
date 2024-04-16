@@ -1,14 +1,14 @@
 import express, { Request, Response } from "express";
-import { PrismaClient } from '@prisma/client';
+import {db} from '../src/utils/db.server'
 
-const prisma = new PrismaClient();
+
 const router = express.Router();
 
 
 router.post('/create', async (req: Request, res: Response) => {
     const { name, email, phone, address } = req.body;
 
-    const theClient = await prisma.client.create({
+    const theClient = await db.client.create({
         data: {
             name,
             email,
@@ -21,13 +21,13 @@ router.post('/create', async (req: Request, res: Response) => {
 });
 
 router.get('/getall', async (req: Request, res: Response) => {
-    const clients = await prisma.client.findMany()
+    const clients = await db.client.findMany()
 
     res.json(clients)
 })
 
 router.get('/:clientId', async (req: Request, res: Response) => {
-    const theClient = await prisma.client.findUnique({
+    const theClient = await db.client.findUnique({
         where: {
             id: parseInt(req.params.clientId)
         }
@@ -44,7 +44,7 @@ router.get('/:clientId', async (req: Request, res: Response) => {
 router.put('/:clientId', async (req: Request, res: Response) => {
     const { name, email, phone, address } = req.body;
 
-    const update = await prisma.client.update({
+    const update = await db.client.update({
         where: {
             id: parseInt(req.params.clientId)
         },
@@ -61,7 +61,7 @@ router.put('/:clientId', async (req: Request, res: Response) => {
 
 router.delete('/:clientId', async (req: Request, res: Response) => {
 
-    const oldClient = await prisma.client.findUnique({
+    const oldClient = await db.client.findUnique({
         where: {
             id: parseInt(req.params.clientId)
         }
@@ -73,7 +73,7 @@ router.delete('/:clientId', async (req: Request, res: Response) => {
         })
     }
 
-    await prisma.client.delete({
+    await db.client.delete({
         where: {
             id: parseInt(req.params.clientId)
         }
