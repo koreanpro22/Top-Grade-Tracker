@@ -36,9 +36,9 @@ model Client {
 
 model Job {
   id          Int        @id @default(autoincrement())
-  client      Client?     @relation(fields: [clientId], references: [id])
+  client      Client?    @relation(fields: [clientId], references: [id])
   clientId    Int        @unique
-  user        User       @relation(fields: [userId], references: [id])
+  user        User?      @relation(fields: [userId], references: [id])
   userId      Int
   description String
   address     String
@@ -53,7 +53,21 @@ model Warrenty {
   createdAt DateTime @default(now())
 }
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+enum Role {
+  EMPLOYEE
+  BOSS
+}
+=======
+=======
+
+>>>>>>> 578b1494407e62feba46a27db39e13a7734b6be8
 // enum Role {
 //   EMPLOYEE
 //   BOSS
 // }
+<<<<<<< HEAD
+>>>>>>> main
+=======
+>>>>>>> 578b1494407e62feba46a27db39e13a7734b6be8
