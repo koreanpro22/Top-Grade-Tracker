@@ -3,7 +3,7 @@ import { db } from '../src/utils/db.server';
 const userRouter = express.Router();
 
 userRouter.post('/users/create', async (req: Request, res: Response) => {
-  const { name, email, password, profilePicture, role, phone } = req.body;
+  const { name, email, password, profilePicture, isAdmin, phone } = req.body;
 
   try {
     const user = await db.user.create({
@@ -12,7 +12,7 @@ userRouter.post('/users/create', async (req: Request, res: Response) => {
         email,
         password,
         profilePicture,
-        role,
+        isAdmin,
         phone
       }
     });
@@ -55,7 +55,7 @@ userRouter.get('/:userId', async (req: Request, res: Response) => {
 
 userRouter.put('/:userId', async (req: Request, res: Response) => {
   try {
-    const { name, email, password, profilePicture, role, phone } = req.body;
+    const { name, email, password, profilePicture, isAdmin, phone } = req.body;
 
     const update = await db.user.update({
       where: {
@@ -66,7 +66,7 @@ userRouter.put('/:userId', async (req: Request, res: Response) => {
         email,
         password,
         profilePicture,
-        role,
+        isAdmin,
         phone
       }
     });

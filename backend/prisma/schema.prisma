@@ -19,7 +19,7 @@ model User {
   name           String?
   password       String
   profilePicture String?
-  role           Role
+  isAdmin        Boolean
   phone          String
   job            Job[]
 }
@@ -50,9 +50,4 @@ model Warrenty {
   jobId     Int
   duration  Int
   createdAt DateTime @default(now())
-}
-
-enum Role {
-  EMPLOYEE
-  BOSS
 }

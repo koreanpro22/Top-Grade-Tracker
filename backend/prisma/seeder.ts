@@ -1,11 +1,12 @@
 import { LargeNumberLike } from "crypto";
 import { db } from "../src/utils/db.server";
+import { Prisma } from "@prisma/client";
 
 type User = {
   name: string;
   email: string;
   password: string;
-  role: string;
+  isAdmin: boolean;
   phone: string;
 };
 
@@ -34,35 +35,35 @@ function getUsers(): Array<User> {
       name: "uswinnerton0",
       email: "joag0@uiuc.edu",
       password: "lD0=.%JA*",
-      role: "EMPLOYEE",
+      isAdmin: false,
       phone: "239 730 8185",
     },
     {
       name: "fgladyer1",
       email: "akiossel1@youtu.be",
       password: "qB5?e6e~O",
-      role: "EMPLOYEE",
+      isAdmin: false,
       phone: "606 262 1281",
     },
     {
       name: "hthorn2",
       email: "cunitt2@slate.com",
       password: "eC9+6mvaQ=wO`{+@",
-      role: "EMPLOYEE",
+      isAdmin: false,
       phone: "266 165 3058",
     },
     {
       name: "wbrane3",
       email: "epickring3@hp.com",
       password: 'xX2=HSkCu$$"6B',
-      role: "EMPLOYEE",
+      isAdmin: false,
       phone: "336 396 3972",
     },
     {
       name: "Rene",
       email: "rene@gmail.com",
       password: "Rene1234!",
-      role: "BOSS",
+      isAdmin: true,
       phone: "123 456 7890",
     },
   ];
@@ -123,19 +124,21 @@ function getWarrenties(): Array<Warrenty> {
   ];
 }
 
-async function seed() {
+async function main() {
   await Promise.all(
     getUsers().map((user) => {
-      const { name, email, password, role, phone } = user;
-        db.user.create({
+      const { name, email, password,isAdmin, phone } = user;
+      db.user.create({
         data: {
           name,
           email,
           password,
-          role: Role.EMPLOYEE,
+          isAdmin,
           phone,
         },
       });
     })
   );
 }
+
+main()
