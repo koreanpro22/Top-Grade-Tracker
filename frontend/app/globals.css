@@ -10,9 +10,9 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+    --foreground-rgb: 0, 0, 0;
+    --background-start-rgb: 250, 250, 250;
+    --background-end-rgb: 250, 250, 250;
   }
 }
 
@@ -30,4 +30,21 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+.homepage-container {
+    background-color: rgb(192, 255, 255);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    align-items: center;
+}
+
+.nav-links {
+  /* border: 1px solid red; */
+  width: 60%;
+  display: flex;
+  justify-content: space-around;
+  margin-top: 16px;
 }

@@ -127,7 +127,7 @@ async function seed() {
   await Promise.all(
     getUsers().map((user) => {
       const { name, email, password, role, phone } = user;
-        db.user.create({
+      db.user.create({
         data: {
           name,
           email,
