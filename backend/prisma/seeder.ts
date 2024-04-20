@@ -127,7 +127,7 @@ function getWarrenties(): Array<Warrenty> {
 async function main() {
   await Promise.all(
     getUsers().map((user) => {
-      const { name, email, password,isAdmin, phone } = user;
+      const { name, email, password, isAdmin, phone } = user;
       db.user.create({
         data: {
           name,
@@ -141,4 +141,4 @@ async function main() {
   );
 }
 
-main()
+main();

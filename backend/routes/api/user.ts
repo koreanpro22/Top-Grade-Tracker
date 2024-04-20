@@ -1,8 +1,8 @@
 import express, { Request, Response } from "express";
-import { db } from '../src/utils/db.server';
+import { db } from "../../src/utils/db.server";
 const userRouter = express.Router();
 
-userRouter.post('/users/create', async (req: Request, res: Response) => {
+userRouter.post("/create", async (req: Request, res: Response) => {
   const { name, email, password, profilePicture, isAdmin, phone } = req.body;
 
   try {
@@ -13,8 +13,8 @@ userRouter.post('/users/create', async (req: Request, res: Response) => {
         password,
         profilePicture,
         isAdmin,
-        phone
-      }
+        phone,
+      },
     });
 
     res.json(user);
@@ -24,7 +24,7 @@ userRouter.post('/users/create', async (req: Request, res: Response) => {
   }
 });
 
-userRouter.get('/users/getall', async (req: Request, res: Response) => {
+userRouter.get("/getall", async (req: Request, res: Response) => {
   try {
     const users = await db.user.findMany();
     res.json(users);
@@ -34,32 +34,32 @@ userRouter.get('/users/getall', async (req: Request, res: Response) => {
   }
 });
 
-userRouter.get('/:userId', async (req: Request, res: Response) => {
+userRouter.get("/:userId", async (req: Request, res: Response) => {
   try {
     const theUser = await db.user.findUnique({
       where: {
-        id: parseInt(req.params.userId)
-      }
+        id: parseInt(req.params.userId),
+      },
     });
 
     if (!theUser) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({ error: "User not found" });
     }
 
     res.json(theUser);
   } catch (error) {
     console.error("Error fetching user:", error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 
-userRouter.put('/:userId', async (req: Request, res: Response) => {
+userRouter.put("/:userId", async (req: Request, res: Response) => {
   try {
     const { name, email, password, profilePicture, isAdmin, phone } = req.body;
 
     const update = await db.user.update({
       where: {
-        id: parseInt(req.params.userId)
+        id: parseInt(req.params.userId),
       },
       data: {
         name,
@@ -67,39 +67,39 @@ userRouter.put('/:userId', async (req: Request, res: Response) => {
         password,
         profilePicture,
         isAdmin,
-        phone
-      }
+        phone,
+      },
     });
 
     res.json(update);
   } catch (error) {
     console.error("Error updating user:", error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 
-userRouter.delete('/:userId', async (req: Request, res: Response) => {
+userRouter.delete("/:userId", async (req: Request, res: Response) => {
   try {
     const oldUser = await db.user.findUnique({
       where: {
-        id: parseInt(req.params.userId)
-      }
+        id: parseInt(req.params.userId),
+      },
     });
 
     if (!oldUser) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({ error: "User not found" });
     }
 
     await db.user.delete({
       where: {
-        id: parseInt(req.params.userId)
-      }
+        id: parseInt(req.params.userId),
+      },
     });
 
-    res.json({ message: 'User deleted' });
+    res.json({ message: "User deleted" });
   } catch (error) {
     console.error("Error deleting user:", error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 

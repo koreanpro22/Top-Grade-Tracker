@@ -1,11 +1,24 @@
+import * as dotenv from "dotenv";
 const express = require("express");
 const app = express();
 const cors = require("cors");
 
+dotenv.config();
+
+if (!process.env.PORT) {
+    process.exit(1)
+}
+
+const PORT: number = parseInt(process.env.PORT as string, 10);
  
 app.use(cors());
 app.use(express.json());
 
-app.listen(8000, () => {
-    console.log("Server has started on port 8000");
+const routes = require('./routes');
+app.use(routes);
+
+app.listen(PORT, () => {
+    console.log(`Server has started on port ${PORT}`);
 });
+
+export default app;
