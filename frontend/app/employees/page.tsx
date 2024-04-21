@@ -1,26 +1,42 @@
-"use client";
+// "use client";
 
 import NavBar from "../components/nav";
+
+interface User {
+  name: string;
+  email: string;
+  password: string;
+  profilePicture: string;
+  isAdmin: boolean;
+  phone: string;
+}
 
 export default async function Employees() {
   // const employees = await fetch('/users/getall');
   // console.log(employees)
 
-  async function getEmployees() {
-    console.log("hitting on click");
-    const res = await fetch("http://localhost:1000/users/getall");
+  const res = await fetch("http://localhost:8000/api/users/getall");
+  const allUsers = await res.json();
+  //   console.log(allUsers.json());
 
-    if (res.ok) {
-      const data = res.json();
-      console.log(data);
-      return data;
-    }
-  }
   return (
     <div className="homepage-container">
       <NavBar />
       <div>All Employees</div>
-      <button onClick={() => getEmployees()}>click me!</button>
+      {allUsers.map((user: User) => {
+        return (
+          <div className="employee-card">
+            <div>
+              <p>{user.name}</p>
+              {user.profilePicture ? (
+                <img src={user.profilePicture}></img>
+              ) : (
+                <img style={{width: "40px"}} src="https://cdn-icons-png.freepik.com/256/1077/1077114.png?semt=ais_hybrid"></img>
+              )}
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 }
