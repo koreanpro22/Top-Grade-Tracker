@@ -10,41 +10,42 @@ export default function Home() {
   }
 
   return (
-    <div className="homepage-container">
+    <div className="container">
       <NavBar />
-
-      <button
-        onClick={(e) => {
-          e.preventDefault();
-          navigateTo("/");
-        }}
-      >
-        Home
-      </button>
-      <button
-        onClick={(e) => {
-          e.preventDefault();
-          navigateTo("/jobs");
-        }}
-      >
-        Jobs
-      </button>
-      <button
-        onClick={(e) => {
-          e.preventDefault();
-          navigateTo("/employees");
-        }}
-      >
-        Employees
-      </button>
-      <button
-        onClick={(e) => {
-          e.preventDefault();
-          navigateTo("/profile");
-        }}
-      >
-        Profile
-      </button>
+      <div className="homepage-container">
+        {/* <button
+          onClick={(e) => {
+            e.preventDefault();
+            navigateTo("/");
+          }}
+        >
+          Home
+        </button>
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            navigateTo("/jobs");
+          }}
+        >
+          Jobs
+        </button>
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            navigateTo("/employees");
+          }}
+        >
+          Employees
+        </button>
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            navigateTo("/profile");
+          }}
+        >
+          Profile
+        </button> */}
+      </div>
     </div>
   );
 }

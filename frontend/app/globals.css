@@ -32,8 +32,9 @@ body {
   }
 }
 
-.homepage-container {
-    background-color: rgb(192, 255, 255);
+.container {
+    background-color: rgb(14, 12, 12);
+    color: gray;
     height: 100vh;
     display: flex;
     flex-direction: column;
@@ -41,10 +42,26 @@ body {
     align-items: center;
 }
 
-.nav-links {
-  /* border: 1px solid red; */
+.nav {
+  border: 1px solid red;
   width: 60%;
   display: flex;
   justify-content: space-around;
   margin-top: 16px;
+}
+
+.single-employee-card {
+  color: gray;
+  width: 250px;
+  background-color: rgb(229, 195, 195);
+  border: 1px solid red;
+  margin: 10px 15px;
+}
+
+.employee-cards {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  width: 100%;
+  border: 1px solid red;
 }

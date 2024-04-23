@@ -2,7 +2,7 @@ import NavBar from "../components/nav";
 
 export default function Jobs() {
   return (
-    <div className="homepage-container">
+    <div className="container">
       <NavBar />
       <div>All Jobs</div>
     </div>
