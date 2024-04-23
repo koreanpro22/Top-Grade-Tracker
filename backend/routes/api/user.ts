@@ -40,6 +40,14 @@ userRouter.get("/:userId", async (req: Request, res: Response) => {
       where: {
         id: parseInt(req.params.userId),
       },
+      include: {
+        job: {
+          include: {
+            warrenties: true,
+            client: true
+          }
+        },
+      },
     });
 
     if (!theUser) {

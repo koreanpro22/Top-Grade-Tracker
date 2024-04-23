@@ -42,6 +42,7 @@ model Job {
   description String
   address     String
   warrenties  Warrenty[]
+  scheduledDate DateTime?
 }
 
 model Warrenty {
