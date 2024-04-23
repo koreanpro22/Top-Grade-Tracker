@@ -10,11 +10,10 @@ export default function Jobs() {
 }
 
 async function getJobs() {
-    const res = await fetch('/jobs')
+  const res = await fetch("/jobs");
 
-    if(res.ok){
-        const data = res.json()
-        return data
-    }
-
+  if (res.ok) {
+    const data = res.json();
+    return data;
+  }
 }

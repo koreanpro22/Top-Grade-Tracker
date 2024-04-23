@@ -1,6 +1,11 @@
+"use client";
+
 import NavBar from "../components/nav";
+import { useState, useEffect } from "react";
+import { getAllUsers } from "../components/dispatch";
 
 interface User {
+  id: number;
   name: string;
   email: string;
   profilePicture: string;
@@ -8,14 +13,18 @@ interface User {
   phone: string;
 }
 
-export default async function Employees() {
+export default function Employees() {
+  const [users, setUsers] = useState<User[]>([]);
 
-  const res = await fetch("http://localhost:8000/api/users/getall");
-  const allUsers = await res.json();
+  useEffect(() => {
+    async function fetchData() {
+      const fetchedUsers = await getAllUsers();
+      setUsers(fetchedUsers)
+    }
+    fetchData();
+  }, []);
 
-  function handleSubmit() {
-
-  }
+  function handleSubmit() {}
 
   return (
     <div className="container">
@@ -23,9 +32,9 @@ export default async function Employees() {
       <div>All Employees</div>
 
       <div className="employee-cards">
-        {allUsers.map((user: User) => {
+        {users && users.map((user: User) => {
           return (
-            <div className="single-employee-card">
+            <div className="single-employee-card" key={user.id}>
               <p>{user.name}</p>
               {user.profilePicture ? (
                 <img src={user.profilePicture}></img>

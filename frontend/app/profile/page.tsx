@@ -1,7 +1,7 @@
 'use client'
 
 import NavBar from "../components/nav";
-import fetchUser from "../components/dispatch";
+import { fetchUser } from "../components/dispatch";
 import { useEffect, useState } from "react";
 
 interface Job {
