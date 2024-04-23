@@ -11,6 +11,7 @@ interface Job {
   scheduledDate: string;
   client: {
     name: string
+    phone: number
   };
 }
 
@@ -40,7 +41,7 @@ export default function Profile() {
       {user && (
         <>
           <div>hello, {user.name}</div>
-          {!user.isAdmin && <div>Add Jobs</div>}
+          {user.isAdmin && <div>Add Jobs</div>}
           <div>
             <div>Your Jobs</div>
             <div>
@@ -53,9 +54,12 @@ export default function Profile() {
                   </div>
                   <div>
                     {job.client.name}
+                    {job.client.phone}
+                  </div>
+                  <div>
+                    {job.description}
                   </div>
                 </div>
-
               ))}
             </div>
           </div>
