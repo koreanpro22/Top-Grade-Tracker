@@ -8,13 +8,15 @@ jobRouter.post("/create", async (req: Request, res: Response) => {
     const { description, address, clientId, userId, scheduledDate } = req.body;
     console.log(description, address, clientId, userId,scheduledDate,'============');
 
+    const parsedScheduledDate = new Date(scheduledDate);
+
     const job = await db.job.create({
       data: {
         description,
         address,
         clientId,
         userId,
-        scheduledDate
+        scheduledDate :parsedScheduledDate
       },
     });
 
