@@ -1,18 +1,71 @@
-"use client";
+'use client'
 
-import { useRouter } from "next/navigation";
 import NavBar from "./components/nav";
+import { fetchUser } from "./components/dispatch";
+import { useEffect, useState } from "react";
 
-export default function Home() {
-  const router = useRouter();
-  async function navigateTo(path: string) {
-    router.push(path);
-  }
+interface Job {
+  id: number;
+  address: string;
+  description: string;
+  scheduledDate: string;
+  client: {
+    name: string
+    phone: number
+  };
+}
+
+
+export default function Profile() {
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    async function fetchData() {
+      const fetchedUser = await fetchUser(1);
+      setUser(fetchedUser);
+    }
+    fetchData();
+  }, []);
+
+  const sortByDate = (jobs: Job[]) => {
+    return jobs.sort((a, b) => {
+      return new Date(a.scheduledDate).getTime() - new Date(b.scheduledDate).getTime();
+    });
+  };
+
+  console.log(user, 'user~~~~~~~~~~~~~~~~~');
 
   return (
     <div className="container">
       <NavBar />
-      <div className="homepage-container"></div>
+      {user && (
+        <>
+          <div>hello, {user.name}</div>
+          {user.isAdmin && <div>Add Jobs</div>}
+          <div>
+            <div>Your Jobs</div>
+            <div>
+              {sortByDate(user.job).map((job: Job) => (
+                <div key={job.id}>
+                  <div>
+                    <div>DATE: {new Date(job.scheduledDate).toLocaleDateString()}</div>
+                    <div>TIME: {new Date(job.scheduledDate).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true })}</div>
+                    <div>{job.address}</div>
+                  </div>
+                  <div>
+                    {job.client.name}
+                    {job.client.phone}
+                  </div>
+                  <div>
+                    {job.description}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }
+
