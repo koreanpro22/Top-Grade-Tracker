@@ -29,7 +29,11 @@ jobRouter.post("/create", async (req: Request, res: Response) => {
 
 jobRouter.get("/getall", async (req: Request, res: Response) => {
   try {
-    const jobs = await db.job.findMany();
+    const jobs = await db.job.findMany({
+      include: {
+        client: true
+      }
+    });
     res.json(jobs);
   } catch (error) {
     console.error("Error fetching jobs:", error);

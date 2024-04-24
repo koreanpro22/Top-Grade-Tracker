@@ -43,10 +43,10 @@ body {
 }
 
 .nav {
-  border: 1px solid red;
-  width: 60%;
+  /* border: 1px solid red; */
+  width: 95%;
   display: flex;
-  justify-content: space-around;
+  justify-content: flex-end;
   margin-top: 16px;
 }
 
