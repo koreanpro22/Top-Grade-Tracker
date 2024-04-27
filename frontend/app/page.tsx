@@ -3,6 +3,7 @@
 import NavBar from "./components/nav";
 import { fetchUser } from "./components/dispatch";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 interface Job {
   id: number;
@@ -46,7 +47,7 @@ export default function Profile() {
             <div>Your Jobs</div>
             <div>
               {sortByDate(user.job).map((job: Job) => (
-                <div key={job.id}>
+                <Link href={`/jobs/${job.id}`} key={job.id}>
                   <div>
                     <div>DATE: {new Date(job.scheduledDate).toLocaleDateString()}</div>
                     <div>TIME: {new Date(job.scheduledDate).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true })}</div>
@@ -59,7 +60,7 @@ export default function Profile() {
                   <div>
                     {job.description}
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
           </div>
@@ -68,4 +69,3 @@ export default function Profile() {
     </div>
   );
 }
-
