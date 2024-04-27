@@ -1,5 +1,5 @@
-export const fetchUser = async (num: number) => {
-  const res = await fetch(`http://localhost:8000/api/users/${num}`, {
+export const fetchUser = async (email: string | undefined) => {
+  const res = await fetch(`http://localhost:8000/api/users/${email}`, {
     method: "GET",
   });
 

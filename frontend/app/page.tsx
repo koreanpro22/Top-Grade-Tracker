@@ -1,7 +1,8 @@
-'use client'
+"use client";
 
 import NavBar from "./components/nav";
 import { fetchUser } from "./components/dispatch";
+import { useUser } from "@auth0/nextjs-auth0/client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 
@@ -11,30 +12,36 @@ interface Job {
   description: string;
   scheduledDate: string;
   client: {
-    name: string
-    phone: number
+    name: string;
+    phone: number;
   };
 }
 
-
-export default function Profile() {
-  const [user, setUser] = useState<any>(null);
+export default function Home() {
+  const { user, error, isLoading } = useUser();
+  const [currUser, setCurrUser] = useState();
 
   useEffect(() => {
     async function fetchData() {
-      const fetchedUser = await fetchUser(1);
-      setUser(fetchedUser);
+      const fetchedUser = await fetchUser(user.email);
+      setCurrUser(fetchedUser)
     }
     fetchData();
-  }, []);
+
+  }, [])
 
   const sortByDate = (jobs: Job[]) => {
     return jobs.sort((a, b) => {
-      return new Date(a.scheduledDate).getTime() - new Date(b.scheduledDate).getTime();
+      return (
+        new Date(a.scheduledDate).getTime() -
+        new Date(b.scheduledDate).getTime()
+      );
     });
   };
 
-  console.log(user, 'user~~~~~~~~~~~~~~~~~');
+  if (isLoading) return <div>Loading...</div>;
+
+  console.log(user.email, "user~~~~~~~~~~~~~~~~~");
 
   return (
     <div className="container">
@@ -68,4 +75,6 @@ export default function Profile() {
       )}
     </div>
   );
+
+  return user ? <div>Home without user</div> : <div>Home with user</div>;
 }
