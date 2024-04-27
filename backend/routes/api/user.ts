@@ -34,11 +34,11 @@ userRouter.get("/getall", async (req: Request, res: Response) => {
   }
 });
 
-userRouter.get("/:userId", async (req: Request, res: Response) => {
+userRouter.get("/:userEmail", async (req: Request, res: Response) => {
   try {
     const theUser = await db.user.findUnique({
       where: {
-        id: parseInt(req.params.userId),
+        email: req.params.userEmail,
       },
       include: {
         job: {
