@@ -48,7 +48,8 @@ jobRouter.get("/:jobId", async (req: Request, res: Response) => {
         id: parseInt(req.params.jobId),
       },
       include: {
-        warrenties: true
+        warrenties: true,
+        client: true
       }
     });
 
