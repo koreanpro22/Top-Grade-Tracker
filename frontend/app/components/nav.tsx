@@ -30,7 +30,7 @@ export default function NavBar() {
             ✕
           </label>
           <div className="h-full flex flex-row justify-end items-end gap-2">
-            <button className="btn btn-primary">Logout</button>
+            <a href="/api/auth/logout">Logout</a>
           </div>
         </div>
       </div>
