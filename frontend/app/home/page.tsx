@@ -1,25 +1,67 @@
-'use client'
+"use client";
 
 import NavBar from "../components/nav";
 import { fetchUser } from "../components/dispatch";
 import { useEffect, useState } from "react";
 import { useUser } from "@auth0/nextjs-auth0/client";
+import React from "react";
 
 interface Job {
   id: number;
-  address: string;
+  clientId: number;
+  userId: number;
   description: string;
+  address: string;
   scheduledDate: string;
-  client: {
-    name: string;
-    phone: number;
-  };
+  client: Client;
+  warrenties: Warrenty[];
 }
 
+interface Warrenty {
+  id: number;
+  jobId: number;
+  duration: number;
+  createdAt: string;
+}
 
-export default function Home(user: any) {
+interface Client {
+  id: number;
+  name: string;
+  email: string;
+  phone: string;
+  address: string;
+}
+
+interface User {
+  id: number;
+  email: string;
+  name: string;
+  profilePicture: string;
+  isAdmin: boolean;
+  phone: string;
+  job: Job[];
+}
+
+console.log();
+
+export default function Home() {
+  const [currUser, setCurrUser] = useState<User>();
+  const { user, error, isLoading } = useUser();
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const fetchedUser = await fetchUser(user.email);
+        setCurrUser(fetchedUser);
+      } catch (err) {
+        console.log("Error has occured => ", err);
+      }
+    }
+    fetchData();
+  }, [user]);
 
   const sortByDate = (jobs: Job[]) => {
+    if (!jobs || jobs.length < 2) return jobs || [];
     return jobs.sort((a, b) => {
       return (
         new Date(a.scheduledDate).getTime() -
@@ -28,18 +70,19 @@ export default function Home(user: any) {
     });
   };
 
+  if (isLoading) return <div className="container">Loading...</div>
+
   return (
     <div className="container">
-      <a href="/api/auth/login">Login</a>
       <NavBar />
-      {userInfo && (
+      {currUser && (
         <>
-          <h1>Hello, {userInfo.name}</h1>
-          {userInfo.isAdmin && <div>Add Jobs</div>}
+          <h1>Hello, {currUser.name}</h1>
+          {currUser.isAdmin && <div>Add Jobs</div>}
           <div>
             <div>Your Jobs</div>
             <div>
-              {sortByDate(userInfo.job).map((job: Job) => (
+              {sortByDate(currUser.job).map((job: Job) => (
                 <div key={job.id}>
                   <div>
                     <div>
@@ -56,8 +99,7 @@ export default function Home(user: any) {
                     <div>{job.address}</div>
                   </div>
                   <div>
-                    {job.client.name}
-                    {job.client.phone}
+                    {job.client.name} {job.client.phone}
                   </div>
                   <div>{job.description}</div>
                 </div>
