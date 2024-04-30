@@ -42,21 +42,31 @@ export default function Profile() {
       {jobs && (
         <>
           <div>
-            <div>Your Jobs</div>
+            <div className="text-red-500 text-3xl m-10">Your Jobs</div>
             <div>
               {sortByDate(jobs).map((job: Job) => (
                 <Link href={`/jobs/${job.id}`} key={job.id}>
-                  <div>
-                    <div>DATE: {new Date(job.scheduledDate).toLocaleDateString()}</div>
-                    <div>TIME: {new Date(job.scheduledDate).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true })}</div>
-                    <div>{job.address}</div>
+                  <div className="flex justify-between mt-8">
+                    <div className="text-content2">DATE: {new Date(job.scheduledDate).toLocaleDateString()}</div>
+                    <div className="text-content2">TIME: {new Date(job.scheduledDate).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true })}</div>
                   </div>
-                  <div>
-                    {job.client.name}
-                    {job.client.phone}
-                  </div>
-                  <div>
-                    {job.description}
+                  <div className="card">
+                    <div className="card-body">
+                      <div>
+                        <div className="card-header p-4">{job.address}</div>
+                      </div>
+                      <div className="text-content2 flex justify-between">
+                        <div>
+                          {job.client.name}
+                        </div>
+                        <div>
+                          {job.client.phone}
+                        </div>
+                      </div>
+                      <div className="text-content2 flex justify-left">
+                        {job.description}
+                      </div>
+                    </div>
                   </div>
                 </Link>
               ))}

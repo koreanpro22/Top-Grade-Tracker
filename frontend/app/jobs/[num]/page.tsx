@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import NavBar from "../../components/nav";
 import { fetchJob } from "../../components/dispatch";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPhone, faSms } from '@fortawesome/free-solid-svg-icons';
 
 import * as dotenv from "dotenv";
 
@@ -61,6 +63,9 @@ interface StreetViewPageProps {
 }
 
 const StreetViewPage: React.FC<StreetViewPageProps> = ({ job }) => {
+  const [latitude, setLatitude] = useState<number | null>(null);
+  const [longitude, setLongitude] = useState<number | null>(null);
+
   useEffect(() => {
     if (!window.google) return;
 
@@ -68,6 +73,8 @@ const StreetViewPage: React.FC<StreetViewPageProps> = ({ job }) => {
     geocoder.geocode({ address: job.address }, (results, status) => {
       if (status === "OK" && results[0]) {
         const position = results[0].geometry.location;
+        setLatitude(position.lat());
+        setLongitude(position.lng());
 
         const streetViewPano = document.getElementById("street-view-pano");
         if (!streetViewPano) return;
@@ -79,7 +86,6 @@ const StreetViewPage: React.FC<StreetViewPageProps> = ({ job }) => {
           disableDefaultUI: true,
         });
       } else {
-        console.log(job);
         console.error("Geocode was not successful for the following reason: ", status);
       }
     });
@@ -95,6 +101,13 @@ const StreetViewPage: React.FC<StreetViewPageProps> = ({ job }) => {
 
     window.open(uri);
   };
+  const handleDirection = () => {
+    const address = encodeURIComponent(job.address);
+    const uri = `https://www.google.com/maps/dir/?api=1&destination=${address}`;
+    window.open(uri, "_blank");
+  }
+
+
 
 
   return (
@@ -104,18 +117,20 @@ const StreetViewPage: React.FC<StreetViewPageProps> = ({ job }) => {
       <div>
         {job.description}
       </div>
-      <div>
+      <div className="flex justify-between">
         <div>
           {job.client.name}
         </div>
-        <button onClick={handleClickCall}>
-          call
-        </button>
-        <button onClick={handleClickText}>
-          text
-        </button>
+        <div className="flex">
+          <button onClick={handleClickCall} className="mr-6">
+            <FontAwesomeIcon icon={faPhone} />
+          </button>
+          <button onClick={handleClickText}>
+            <FontAwesomeIcon icon={faSms} />
+          </button>
+        </div>
       </div>
-      <button>Copy Address</button>
+      <button onClick={handleDirection}>Directions</button>
     </div>
   );
 };
