@@ -5,6 +5,7 @@ import { fetchUser } from "../components/dispatch";
 import { useEffect, useState } from "react";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import React from "react";
+import { useGlobalContext } from "../context/store";
 
 interface Job {
   id: number;
@@ -45,6 +46,7 @@ interface User {
 console.log();
 
 export default function Home() {
+  const { userId, setUserId, userAdmin, setUserAdmin, data, setData } = useGlobalContext();
   const [currUser, setCurrUser] = useState<User>();
   const { user, error, isLoading } = useUser();
 
@@ -53,6 +55,8 @@ export default function Home() {
       try {
         const fetchedUser = await fetchUser(user.email);
         setCurrUser(fetchedUser);
+        console.log('fetchedUser in useEffect => ', fetchedUser)
+        setUserAdmin(fetchedUser.isAdmin);
       } catch (err) {
         console.log("Error has occured => ", err);
       }
@@ -75,6 +79,7 @@ export default function Home() {
   return (
     <div className="container">
       <NavBar />
+      {userAdmin ? <div>Show if admin</div> : <div>Show if not admin</div>}
       {currUser && (
         <>
           <h1>Hello, {currUser.name}</h1>

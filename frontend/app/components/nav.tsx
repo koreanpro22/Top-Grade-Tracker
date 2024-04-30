@@ -16,7 +16,7 @@ export default function NavBar() {
         <div className="drawer-content pt-10 flex flex-col h-full gap-4">
           <Link href="/">Home</Link>
           <Link href="/employees">Employees</Link>
-          <Link href="/jobs">Jobs</Link>
+          <Link href="/jobs">All Jobs</Link>
           <a
             href="https://docs.google.com/document/d/1xF8LFdaAUbIQV6DRH9zluvD3vSnwKUmmyugUna9keKQ/edit?usp=sharing"
             download
