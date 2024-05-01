@@ -43,7 +43,6 @@ interface User {
   job: Job[];
 }
 
-console.log();
 
 export default function Home() {
   const { userId, setUserId, userAdmin, setUserAdmin, data, setData } = useGlobalContext();
