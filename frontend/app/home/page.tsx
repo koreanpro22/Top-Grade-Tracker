@@ -45,23 +45,22 @@ interface User {
 
 
 export default function Home() {
-  const { userId, setUserId, userAdmin, setUserAdmin, data, setData } = useGlobalContext();
-  const [currUser, setCurrUser] = useState<User>();
+  const { userData, setUserData } = useGlobalContext();
   const { user, error, isLoading } = useUser();
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const fetchedUser = await fetchUser(user.email);
-        setCurrUser(fetchedUser);
-        console.log('fetchedUser in useEffect => ', fetchedUser)
-        setUserAdmin(fetchedUser.isAdmin);
-      } catch (err) {
-        console.log("Error has occured => ", err);
-      }
-    }
-    fetchData();
-  }, [user]);
+  // useEffect(() => {
+  //   async function fetchData() {
+  //     try {
+  //       const fetchedUser = await fetchUser(user.email);
+  //       setUserData(fetchedUser);
+  //       console.log('user logged in', user)
+  //       console.log('fetchedUser in useEffect => ', fetchedUser)
+  //     } catch (err) {
+  //       console.log("Error has occured => ", err);
+  //     }
+  //   }
+  //   fetchData();
+  // }, [user]);
 
   const sortByDate = (jobs: Job[]) => {
     if (!jobs || jobs.length < 2) return jobs || [];
@@ -78,15 +77,14 @@ export default function Home() {
   return (
     <div className="container">
       <NavBar />
-      {userAdmin ? <div>Show if admin</div> : <div>Show if not admin</div>}
-      {currUser && (
+      {userData && (
         <>
-          <h1>Hello, {currUser.name}</h1>
-          {currUser.isAdmin && <div>Add Jobs</div>}
+          <h1>Hello, {userData.name}</h1>
+          {userData.isAdmin && <div>Add Jobs</div>}
           <div>
             <div>Your Jobs</div>
             <div>
-              {sortByDate(currUser.job).map((job: Job) => (
+              {sortByDate(userData.job).map((job: Job) => (
                 <div key={job.id}>
                   <div>
                     <div>

@@ -9,36 +9,59 @@ import {
   useState,
 } from "react";
 
+interface Job {
+  id: number;
+  clientId: number;
+  userId: number;
+  description: string;
+  address: string;
+  scheduledDate: string;
+  client: Client;
+  warrenties: Warrenty[];
+}
+
+interface Warrenty {
+  id: number;
+  jobId: number;
+  duration: number;
+  createdAt: string;
+}
+
+interface Client {
+  id: number;
+  name: string;
+  email: string;
+  phone: string;
+  address: string;
+}
+
+
 type DataType = {
-  firstName: string;
+  name: string;
+  email: string;
+  profilePicture: string;
+  phone: string;
+  id: number;
+  isAdmin: boolean;
+  jobs: Job[];
 };
 
 interface ContextProps {
-  userId: string;
-  setUserId: Dispatch<SetStateAction<string>>;
-  userAdmin: boolean;
-  setUserAdmin: Dispatch<SetStateAction<boolean>>;
-  data: DataType[];
-  setData: Dispatch<SetStateAction<DataType[]>>;
+  userData: DataType[];
+  setUserData: Dispatch<SetStateAction<DataType[]>>;
 }
 
 const GlobalContext = createContext<ContextProps>({
-  userId: "",
-  setUserId: (): string => "",
-  userAdmin: false,
-  setUserAdmin: (): boolean => false,
-  data: [],
-  setData: (): DataType[] => [],
+  userData: [],
+  setUserData: (): DataType[] => [],
 });
 
 export const GlobalContextProvider = ({ children }) => {
-  const [userId, setUserId] = useState("");
-  const [userAdmin, setUserAdmin] = useState(false);
-  const [data, setData] = useState<[] | DataType[]>([]);
+  const [userData, setUserData] = useState<[] | DataType[]>([]);
 
   return (
     <GlobalContext.Provider
-      value={{ userId, setUserId, userAdmin, setUserAdmin, data, setData }}
+      value={{ userData, setUserData }}
     >
       {children}
     </GlobalContext.Provider>
