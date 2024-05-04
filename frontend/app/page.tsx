@@ -2,14 +2,25 @@
 
 import { fetchUser } from "./components/dispatch";
 import { useUser } from "@auth0/nextjs-auth0/client";
-import { useEffect, useState } from "react";
 import React from "react";
 import { redirect } from "next/navigation";
+import { useGlobalContext } from "./context/store";
 
 export default function Login() {
+  const { userData, setUserData } = useGlobalContext();
   const { user, error, isLoading } = useUser();
 
   if (user) {
+    async function fetchData() {
+      try {
+        const fetchedUser = await fetchUser(user.email);
+        setUserData(fetchedUser || []);
+      } catch (err) {
+        console.log("Error has occured => ", err);
+      } finally {
+      }
+    }
+    fetchData();
     redirect("/home");
   }
 
@@ -17,7 +28,9 @@ export default function Login() {
 
   return (
     <div className="container">
-      <a href="/api/auth/login">Login</a>
+      <div className="btn ">
+        <a href="/api/auth/login">Login</a>
+      </div>
     </div>
   );
 }
