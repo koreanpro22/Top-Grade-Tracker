@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import React from "react";
 import { useGlobalContext } from "../context/store";
+import { redirect } from "next/navigation";
 
 interface Job {
   id: number;
@@ -73,7 +74,8 @@ export default function Home() {
   };
 
   if (isLoading) return <div className="container">Loading...</div>
-
+  if (!user) redirect('/');
+  
   return (
     <div className="container">
       <NavBar />

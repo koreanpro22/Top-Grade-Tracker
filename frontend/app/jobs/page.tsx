@@ -1,9 +1,12 @@
-'use client'
+"use client";
 
 import NavBar from "../components/nav";
 import { fetchJobs } from "../components/dispatch";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useUser } from "@auth0/nextjs-auth0/client";
+import { useGlobalContext } from "../context/store";
+import { redirect } from "next/navigation";
 
 interface Job {
   id: number;
@@ -11,14 +14,15 @@ interface Job {
   description: string;
   scheduledDate: string;
   client: {
-    name: string
-    phone: number
+    name: string;
+    phone: number;
   };
 }
 
-
 export default function Profile() {
   const [jobs, setJobs] = useState<any>(null);
+  const { userData, setUserData } = useGlobalContext();
+  const { user, error, isLoading } = useUser();
 
   useEffect(() => {
     async function fetchData() {
@@ -30,11 +34,18 @@ export default function Profile() {
 
   const sortByDate = (jobs: Job[]) => {
     return jobs.sort((a, b) => {
-      return new Date(a.scheduledDate).getTime() - new Date(b.scheduledDate).getTime();
+      return (
+        new Date(a.scheduledDate).getTime() -
+        new Date(b.scheduledDate).getTime()
+      );
     });
   };
 
-  console.log(jobs, 'jobs~~~~~~~~~~~~~~~~~');
+  console.log(jobs, "jobs~~~~~~~~~~~~~~~~~");
+
+
+  if (isLoading) return <div className="container">Loading...</div>;
+  if (!user) redirect("/");
 
   return (
     <div className="container">
@@ -47,8 +58,17 @@ export default function Profile() {
               {sortByDate(jobs).map((job: Job) => (
                 <Link href={`/jobs/${job.id}`} key={job.id}>
                   <div className="flex justify-between mt-8">
-                    <div className="text-content2">DATE: {new Date(job.scheduledDate).toLocaleDateString()}</div>
-                    <div className="text-content2">TIME: {new Date(job.scheduledDate).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true })}</div>
+                    <div className="text-content2">
+                      DATE: {new Date(job.scheduledDate).toLocaleDateString()}
+                    </div>
+                    <div className="text-content2">
+                      TIME:{" "}
+                      {new Date(job.scheduledDate).toLocaleTimeString([], {
+                        hour: "numeric",
+                        minute: "2-digit",
+                        hour12: true,
+                      })}
+                    </div>
                   </div>
                   <div className="card">
                     <div className="card-body">
@@ -56,12 +76,8 @@ export default function Profile() {
                         <div className="card-header p-4">{job.address}</div>
                       </div>
                       <div className="text-content2 flex justify-between">
-                        <div>
-                          {job.client.name}
-                        </div>
-                        <div>
-                          {job.client.phone}
-                        </div>
+                        <div>{job.client.name}</div>
+                        <div>{job.client.phone}</div>
                       </div>
                       <div className="text-content2 flex justify-left">
                         {job.description}

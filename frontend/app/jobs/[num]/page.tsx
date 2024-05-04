@@ -1,10 +1,13 @@
-'use client'
+"use client";
 
 import { useEffect, useState } from "react";
 import NavBar from "../../components/nav";
 import { fetchJob } from "../../components/dispatch";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPhone, faSms } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPhone, faSms } from "@fortawesome/free-solid-svg-icons";
+import { useUser } from "@auth0/nextjs-auth0/client";
+import { useGlobalContext } from "../context/store";
+import { redirect } from "next/navigation";
 
 import * as dotenv from "dotenv";
 
@@ -21,12 +24,10 @@ const loadScript = (url: string, callback: () => void) => {
   if (existingScript && callback) callback();
 };
 
-const Jobs = ({
-  params,
-}: {
-  params: { num: number }
-}) => {
+const Jobs = ({ params }: { params: { num: number } }) => {
   const [job, setJob] = useState<any>(null);
+  const { userData, setUserData } = useGlobalContext();
+  const { user, error, isLoading } = useUser();
   const { num } = params;
 
   useEffect(() => {
@@ -38,21 +39,24 @@ const Jobs = ({
   }, [num]);
   const YOUR_API_KEY: string = process.env.REACT_APP_YOUR_API_KEY as string;
 
-  console.log(YOUR_API_KEY, 'api key');
-  console.log(process.env, 'process dotenv');
+  console.log(YOUR_API_KEY, "api key");
+  console.log(process.env, "process dotenv");
   console.log(job);
   useEffect(() => {
-    loadScript(`https://maps.googleapis.com/maps/api/js?key=${YOUR_API_KEY}&libraries=places`, () => {
-    });
+    loadScript(
+      `https://maps.googleapis.com/maps/api/js?key=${YOUR_API_KEY}&libraries=places`,
+      () => {}
+    );
   }, []);
+
+  if (isLoading) return <div className="container">Loading...</div>;
+  if (!user) redirect("/");
 
   return (
     <div className="container">
       <NavBar />
       <div>
-        <div>
-          {job && <StreetViewPage job={job} />}
-        </div>
+        <div>{job && <StreetViewPage job={job} />}</div>
       </div>
     </div>
   );
@@ -79,14 +83,20 @@ const StreetViewPage: React.FC<StreetViewPageProps> = ({ job }) => {
         const streetViewPano = document.getElementById("street-view-pano");
         if (!streetViewPano) return;
 
-        const panorama = new window.google.maps.StreetViewPanorama(streetViewPano, {
-          position: position,
-          pov: { heading: 165, pitch: 0 },
-          zoom: 1,
-          disableDefaultUI: true,
-        });
+        const panorama = new window.google.maps.StreetViewPanorama(
+          streetViewPano,
+          {
+            position: position,
+            pov: { heading: 165, pitch: 0 },
+            zoom: 1,
+            disableDefaultUI: true,
+          }
+        );
       } else {
-        console.error("Geocode was not successful for the following reason: ", status);
+        console.error(
+          "Geocode was not successful for the following reason: ",
+          status
+        );
       }
     });
   }, [job]);
@@ -105,22 +115,18 @@ const StreetViewPage: React.FC<StreetViewPageProps> = ({ job }) => {
     const address = encodeURIComponent(job.address);
     const uri = `https://www.google.com/maps/dir/?api=1&destination=${address}`;
     window.open(uri, "_blank");
-  }
-
-
-
+  };
 
   return (
     <div>
       <h1>{job.address}</h1>
-      <div id="street-view-pano" style={{ width: "100%", height: "300px" }}></div>
-      <div>
-        {job.description}
-      </div>
+      <div
+        id="street-view-pano"
+        style={{ width: "100%", height: "300px" }}
+      ></div>
+      <div>{job.description}</div>
       <div className="flex justify-between">
-        <div>
-          {job.client.name}
-        </div>
+        <div>{job.client.name}</div>
         <div className="flex">
           <button onClick={handleClickCall} className="mr-6">
             <FontAwesomeIcon icon={faPhone} />
@@ -134,6 +140,5 @@ const StreetViewPage: React.FC<StreetViewPageProps> = ({ job }) => {
     </div>
   );
 };
-
 
 export default Jobs;
