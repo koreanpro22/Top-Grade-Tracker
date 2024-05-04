@@ -37,16 +37,16 @@ export default function Profile() {
     });
   };
 
-  const handleClickCall = () => {
-    const uri = `tel:${job.client.phone}`;
+  // const handleClickCall = () => {
+  //   const uri = `tel:${job.client.phone}`;
 
-    window.open(uri);
-  };
-  const handleClickText = (job) => {
-    const uri = `sms:${job.client.phone}`;
+  //   window.open(uri);
+  // };
+  // const handleClickText = () => {
+  //   const uri = `sms:${job.client.phone}`;
 
-    window.open(uri);
-  };
+  //   window.open(uri);
+  // };
 
   console.log(jobs, 'jobs~~~~~~~~~~~~~~~~~');
 
