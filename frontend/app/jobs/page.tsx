@@ -4,6 +4,9 @@ import NavBar from "../components/nav";
 import { fetchJobs } from "../components/dispatch";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPhone, faSms } from '@fortawesome/free-solid-svg-icons';
+
 
 interface Job {
   id: number;
@@ -32,6 +35,17 @@ export default function Profile() {
     return jobs.sort((a, b) => {
       return new Date(a.scheduledDate).getTime() - new Date(b.scheduledDate).getTime();
     });
+  };
+
+  const handleClickCall = () => {
+    const uri = `tel:${job.client.phone}`;
+
+    window.open(uri);
+  };
+  const handleClickText = (job) => {
+    const uri = `sms:${job.client.phone}`;
+
+    window.open(uri);
   };
 
   console.log(jobs, 'jobs~~~~~~~~~~~~~~~~~');
@@ -64,7 +78,14 @@ export default function Profile() {
                         </div>
                       </div>
                       <div className="text-content2 flex justify-left">
-                        {job.description}
+                        <div>
+                          <h3>
+                            Description:
+                          </h3>
+                          <div className="text-content3">
+                            {job.description}
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>

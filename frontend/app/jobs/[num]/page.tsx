@@ -42,7 +42,7 @@ const Jobs = ({
   console.log(process.env, 'process dotenv');
   console.log(job);
   useEffect(() => {
-    loadScript(`https://maps.googleapis.com/maps/api/js?key=${YOUR_API_KEY}&libraries=places`, () => {
+    loadScript(`https://maps.googleapis.com/maps/api/js?key=AIzaSyDnKEeDUQ_wf2JhICaZYoSSzYi8SlaeaDI&libraries=places`, () => {
     });
   }, []);
 
@@ -62,9 +62,8 @@ interface StreetViewPageProps {
   job: any;
 }
 
+
 const StreetViewPage: React.FC<StreetViewPageProps> = ({ job }) => {
-  const [latitude, setLatitude] = useState<number | null>(null);
-  const [longitude, setLongitude] = useState<number | null>(null);
 
   useEffect(() => {
     if (!window.google) return;
@@ -73,15 +72,13 @@ const StreetViewPage: React.FC<StreetViewPageProps> = ({ job }) => {
     geocoder.geocode({ address: job.address }, (results, status) => {
       if (status === "OK" && results[0]) {
         const position = results[0].geometry.location;
-        setLatitude(position.lat());
-        setLongitude(position.lng());
 
         const streetViewPano = document.getElementById("street-view-pano");
         if (!streetViewPano) return;
 
         const panorama = new window.google.maps.StreetViewPanorama(streetViewPano, {
           position: position,
-          pov: { heading: 165, pitch: 0 },
+          pov: { heading: 165, pitch: 1 },
           zoom: 1,
           disableDefaultUI: true,
         });
@@ -107,14 +104,18 @@ const StreetViewPage: React.FC<StreetViewPageProps> = ({ job }) => {
     window.open(uri, "_blank");
   }
 
+  
 
 
 
   return (
-    <div>
-      <h1>{job.address}</h1>
-      <div id="street-view-pano" style={{ width: "100%", height: "300px" }}></div>
-      <div>
+    <div className="p-10 w-full" style={{ width: "100vw" }}>
+      <div className="text-red-100 text-xs mb-5">{job.address}</div>
+      <div className="rounded border-opacity-5 shadow-outline" id="street-view-pano" style={{ width: "100%", height: "300px" }}></div>
+      <div className="mt-8">
+        Description
+      </div>
+      <div className="mb-5">
         {job.description}
       </div>
       <div className="flex justify-between">
