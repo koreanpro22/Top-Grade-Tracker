@@ -52,7 +52,7 @@ export default function Profile() {
       {jobs && (
         <>
           <div>
-            <div className="text-red-500 text-3xl m-10">Your Jobs</div>
+            <div className="text-red-500 text-3xl m-10">All Jobs</div>
             <div>
               {sortByDate(jobs).map((job: Job) => (
                 <Link href={`/jobs/${job.id}`} key={job.id}>
