@@ -43,8 +43,7 @@ userRouter.get("/:userEmail", async (req: Request, res: Response) => {
       include: {
         job: {
           include: {
-            warrenties: true,
-            client: true
+            warrenties: true
           }
         },
       },

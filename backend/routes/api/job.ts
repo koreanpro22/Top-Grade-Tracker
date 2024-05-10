@@ -5,16 +5,17 @@ const jobRouter = express.Router();
 
 jobRouter.post("/create", async (req: Request, res: Response) => {
   try {
-    const { description, address, clientId, userId, scheduledDate } = req.body;
-    console.log(description, address, clientId, userId,scheduledDate,'============');
+    const { description, address, clientName, clientEmail, clientPhone, userId, scheduledDate } = req.body;
 
     const parsedScheduledDate = new Date(scheduledDate);
 
     const job = await db.job.create({
       data: {
         description,
+        clientEmail,
+        clientName,
+        clientPhone,
         address,
-        clientId,
         userId,
         scheduledDate :parsedScheduledDate
       },
@@ -29,11 +30,7 @@ jobRouter.post("/create", async (req: Request, res: Response) => {
 
 jobRouter.get("/getall", async (req: Request, res: Response) => {
   try {
-    const jobs = await db.job.findMany({
-      include: {
-        client: true
-      }
-    });
+    const jobs = await db.job.findMany();
     res.json(jobs);
   } catch (error) {
     console.error("Error fetching jobs:", error);
@@ -48,8 +45,7 @@ jobRouter.get("/:jobId", async (req: Request, res: Response) => {
         id: parseInt(req.params.jobId),
       },
       include: {
-        warrenties: true,
-        client: true
+        warrenties: true
       }
     });
 
@@ -66,7 +62,7 @@ jobRouter.get("/:jobId", async (req: Request, res: Response) => {
 
 jobRouter.put("/:jobId", async (req: Request, res: Response) => {
   try {
-    const { description, address, clientId, userId, scheduledDate } = req.body;
+    const { description, address, clientName, clientEmail, clientPhone, userId, scheduledDate } = req.body;
 
     const parsedScheduledDate = new Date(scheduledDate);
 
@@ -86,10 +82,12 @@ jobRouter.put("/:jobId", async (req: Request, res: Response) => {
       },
       data: {
         description,
+        clientEmail,
+        clientName,
+        clientPhone,
         address,
-        clientId,
         userId,
-        scheduledDate: parsedScheduledDate,
+        scheduledDate :parsedScheduledDate
       },
     });
 
