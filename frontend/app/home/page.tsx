@@ -44,7 +44,6 @@ interface User {
   job: Job[];
 }
 
-
 export default function Home() {
   const { userData, setUserData } = useGlobalContext();
   const { user, error, isLoading } = useUser();
@@ -54,8 +53,6 @@ export default function Home() {
   //     try {
   //       const fetchedUser = await fetchUser(user.email);
   //       setUserData(fetchedUser);
-  //       console.log('user logged in', user)
-  //       console.log('fetchedUser in useEffect => ', fetchedUser)
   //     } catch (err) {
   //       console.log("Error has occured => ", err);
   //     }
@@ -73,9 +70,10 @@ export default function Home() {
     });
   };
 
-  if (isLoading) return <div className="container">Loading...</div>
-  if (!user) redirect('/');
-  
+  if (isLoading) return <div className="container">Loading...</div>;
+  if (!user) redirect("/");
+  console.log('userData ===> ', userData)
+  console.log('user ===> ', user)
   return (
     <div className="container">
       <NavBar />

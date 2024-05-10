@@ -35,7 +35,6 @@ interface Client {
   address: string;
 }
 
-
 type DataType = {
   name: string;
   email: string;
