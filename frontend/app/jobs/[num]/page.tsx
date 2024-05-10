@@ -121,7 +121,7 @@ const StreetViewPage: React.FC<StreetViewPageProps> = ({ job }) => {
       <div>
           Warrenty Duration:
           {" "}
-          {job.warrenties[0].duration}
+          {job.warrenties[0]?.duration ? job.warrenties[0].duration : "Add Warrenty"}
       </div>
       <div className="flex justify-between">
         <div>
