@@ -104,7 +104,7 @@ const StreetViewPage: React.FC<StreetViewPageProps> = ({ job }) => {
     window.open(uri, "_blank");
   }
 
-  
+
 
 
 
@@ -117,6 +117,11 @@ const StreetViewPage: React.FC<StreetViewPageProps> = ({ job }) => {
       </div>
       <div className="mb-5">
         {job.description}
+      </div>
+      <div>
+          Warrenty Duration:
+          {" "}
+          {job.warrenties[0].duration}
       </div>
       <div className="flex justify-between">
         <div>
