@@ -89,12 +89,12 @@ const StreetViewPage: React.FC<StreetViewPageProps> = ({ job }) => {
   }, [job]);
 
   const handleClickCall = () => {
-    const uri = `tel:${job.client.phone}`;
+    const uri = `tel:${job.clientPhone}`;
 
     window.open(uri);
   };
   const handleClickText = () => {
-    const uri = `sms:${job.client.phone}`;
+    const uri = `sms:${job.clientPhone}`;
 
     window.open(uri);
   };
@@ -125,7 +125,7 @@ const StreetViewPage: React.FC<StreetViewPageProps> = ({ job }) => {
       </div>
       <div className="flex justify-between">
         <div>
-          {job.client.name}
+          {job.clientName}
         </div>
         <div className="flex">
           <button onClick={handleClickCall} className="mr-6">

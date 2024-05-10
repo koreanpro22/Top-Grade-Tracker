@@ -6,6 +6,9 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPhone, faSms } from '@fortawesome/free-solid-svg-icons';
+import DatePicker from "react-datepicker";
+import 'react-datepicker/dist/react-datepicker.css';
+
 
 
 interface Job {
@@ -13,15 +16,47 @@ interface Job {
   address: string;
   description: string;
   scheduledDate: string;
-  client: {
-    name: string
-    phone: number
-  };
+  clientName: string;
+  clientPhone: string
 }
-
 
 export default function Profile() {
   const [jobs, setJobs] = useState<any>(null);
+  const [startDate, setStartDate] = useState<Date | null>(new Date());
+  const [date, setDate] = useState<any>(null)
+  const [name, setName] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
+  const [phone, setPhone] = useState<string>('');
+  const [address, setAddress] = useState<string>('');
+  const [description, setDescription] = useState<string>('');
+
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setName(e.target.value);
+  };
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+  };
+
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPhone(e.target.value);
+  };
+
+  const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setAddress(e.target.value);
+  };
+
+  const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setDescription(e.target.value);
+  };
+  const handleDateChange = (date: Date | null) => {
+    setStartDate(date);
+    if (date) {
+      // Format date in ISO string format
+      const isoString = date.toISOString();
+      setDate(isoString)
+    }
+  };
 
   useEffect(() => {
     async function fetchData() {
@@ -63,8 +98,91 @@ export default function Profile() {
               <label className="modal-overlay" htmlFor="modal-1"></label>
               <div className="modal-content flex flex-col gap-5">
                 <label htmlFor="modal-1" className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
-                <h2 className="text-xl">Modal title 1</h2>
-                <span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur dolorum voluptate ratione dicta. Maxime cupiditate, est commodi consectetur earum iure, optio, obcaecati in nulla saepe maiores nobis iste quasi alias!</span>
+                <h2 className="text-xl">Adding Job</h2>
+                <section className="bg-gray-2 rounded-xl">
+                  <div className="p-8 shadow-lg">
+                    <form className="space-y-4">
+                      <div className="w-full">
+                        <label className="sr-only" htmlFor="name">Client Name</label>
+                        <input
+                          className="input input-solid max-w-full"
+                          placeholder="Client Name"
+                          type="text"
+                          id="name"
+                          value={name}
+                          onChange={handleNameChange}
+                        />
+                      </div>
+
+                      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                        <div>
+                          <label className="sr-only" htmlFor="email">Client Email</label>
+                          <input
+                            className="input input-solid"
+                            placeholder="Client Email address"
+                            type="email"
+                            id="email"
+                            value={email}
+                            onChange={handleEmailChange}
+                          />
+                        </div>
+
+                        <div>
+                          <label className="sr-only" htmlFor="phone">Client Phone</label>
+                          <input
+                            className="input input-solid"
+                            placeholder="Client Phone Number"
+                            type="tel"
+                            id="phone"
+                            value={phone}
+                            onChange={handlePhoneChange}
+                          />
+                        </div>
+
+                        <div>
+                          <label className="sr-only" htmlFor="address">Address</label>
+                          <input
+                            className="input input-solid"
+                            placeholder="Address"
+                            type="text"
+                            id="address"
+                            value={address}
+                            onChange={handleAddressChange}
+                          />
+                        </div>
+                      </div>
+
+                      <div className="w-full">
+                        <label className="sr-only" htmlFor="message">Description</label>
+                        <textarea
+                          className="textarea textarea-solid max-w-full"
+                          placeholder="Description"
+                          id="message"
+                          value={description}
+                          onChange={handleDescriptionChange}
+                        ></textarea>
+                      </div>
+
+                      <div className="w-full">
+                        <label className="sr-only" htmlFor="dateTime">Select Date and Time</label>
+                        <DatePicker
+                          selected={startDate}
+                          onChange={handleDateChange}
+                          showTimeSelect
+                          timeFormat="HH:mm"
+                          timeIntervals={30}
+                          timeCaption="Time"
+                          dateFormat="MMMM d, yyyy h:mm aa"
+                          className="input input-solid"
+                        />
+                      </div>
+
+                      <div className="mt-4">
+                        <button type="button" className="rounded-lg btn btn-primary btn-block">Send Enquiry</button>
+                      </div>
+                    </form>
+                  </div>
+                </section>
                 <div className="flex gap-3">
                   <button className="btn btn-error btn-block">Add</button>
 
@@ -86,10 +204,10 @@ export default function Profile() {
                       </div>
                       <div className="text-content2 flex justify-between">
                         <div>
-                          {job.client.name}
+                          {job.clientName}
                         </div>
                         <div>
-                          {job.client.phone}
+                          {job.clientPhone}
                         </div>
                       </div>
                       <div className="text-content2 flex justify-left">
