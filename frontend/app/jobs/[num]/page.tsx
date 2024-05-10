@@ -66,9 +66,8 @@ interface StreetViewPageProps {
   job: any;
 }
 
+
 const StreetViewPage: React.FC<StreetViewPageProps> = ({ job }) => {
-  const [latitude, setLatitude] = useState<number | null>(null);
-  const [longitude, setLongitude] = useState<number | null>(null);
 
   useEffect(() => {
     if (!window.google) return;
@@ -77,8 +76,6 @@ const StreetViewPage: React.FC<StreetViewPageProps> = ({ job }) => {
     geocoder.geocode({ address: job.address }, (results, status) => {
       if (status === "OK" && results[0]) {
         const position = results[0].geometry.location;
-        setLatitude(position.lat());
-        setLongitude(position.lng());
 
         const streetViewPano = document.getElementById("street-view-pano");
         if (!streetViewPano) return;

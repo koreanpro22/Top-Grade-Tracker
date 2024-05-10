@@ -7,6 +7,9 @@ import Link from "next/link";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { useGlobalContext } from "../context/store";
 import { redirect } from "next/navigation";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPhone, faSms } from '@fortawesome/free-solid-svg-icons';
+
 
 interface Job {
   id: number;
@@ -41,11 +44,7 @@ export default function Profile() {
     });
   };
 
-  console.log(jobs, "jobs~~~~~~~~~~~~~~~~~");
-
-
-  if (isLoading) return <div className="container">Loading...</div>;
-  if (!user) redirect("/");
+  console.log(jobs, 'jobs~~~~~~~~~~~~~~~~~');
 
   return (
     <div className="container">
@@ -80,7 +79,14 @@ export default function Profile() {
                         <div>{job.client.phone}</div>
                       </div>
                       <div className="text-content2 flex justify-left">
-                        {job.description}
+                        <div>
+                          <h3>
+                            Description:
+                          </h3>
+                          <div className="text-content3">
+                            {job.description}
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
