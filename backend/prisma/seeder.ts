@@ -69,23 +69,6 @@ function getUsers(): Array<User> {
   ];
 }
 
-function getClients(): Array<Client> {
-  return [
-    {
-      name: "customer 1",
-      email: "email1@gmail.com",
-      phone: "345 567 7890",
-      address: "21 park place",
-    },
-    {
-      name: "customer 2",
-      email: "email2@gmail.com",
-      phone: "654 243 9124",
-      address: "90 smith street",
-    },
-  ];
-}
-
 function getJobs(): Array<Job> {
   return [
     {
