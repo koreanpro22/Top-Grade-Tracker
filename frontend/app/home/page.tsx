@@ -46,6 +46,7 @@ interface User {
 
 
 export default function Home() {
+  // const { userData, setUserData } : { userData: User, setUserData: any} = useGlobalContext();
   const { userData, setUserData } = useGlobalContext();
   const { user, error, isLoading } = useUser();
 
@@ -103,7 +104,7 @@ export default function Home() {
                     <div>{job.address}</div>
                   </div>
                   <div>
-                    {job.client.name} {job.client.phone}
+                    {job?.client?.name} {job?.client?.phone}
                   </div>
                   <div>{job.description}</div>
                 </div>
