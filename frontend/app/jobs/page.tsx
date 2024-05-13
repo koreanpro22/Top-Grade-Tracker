@@ -33,19 +33,19 @@ export default function Profile() {
   const [description, setDescription] = useState<string>('');
   const { userData, setUserData } = useGlobalContext();
   const { user, error, isLoading } = useUser();
-  // useEffect(() => {
-  //   async function fetchData() {
-  //     try {
-  //       const fetchedUser = await fetchUser(user.email);
-  //       setUserData(fetchedUser);
-  //       console.log('user logged in', user)
-  //       console.log('fetchedUser in useEffect => ', fetchedUser)
-  //     } catch (err) {
-  //       console.log("Error has occured => ", err);
-  //     }
-  //   }
-  //   fetchData();
-  // }, [user]);
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const fetchedUser = await fetchUser(user.email);
+        setUserData(fetchedUser);
+        console.log('user logged in', user)
+        console.log('fetchedUser in useEffect => ', fetchedUser)
+      } catch (err) {
+        console.log("Error has occured => ", err);
+      }
+    }
+    fetchData();
+  }, [user]);
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
@@ -73,6 +73,10 @@ export default function Profile() {
       const isoString = date.toISOString();
       setDate(isoString)
     }
+  };
+
+  const isFormValid = () => {
+    return name.trim() !== "" && email.trim() !== "" && phone.trim() !== "" && address.trim() !== "" && description.trim() !== "";
   };
 
   useEffect(() => {
@@ -105,6 +109,27 @@ export default function Profile() {
 
   const submitData = async () => {
     console.log('clicked');
+    if (address === "") {
+      return error
+    }
+    if (description === "") {
+      return error
+    }
+    if (name === "") {
+      return error
+    }
+    if (phone === "") {
+      return error
+    }
+    if (date === "") {
+      return error
+    }
+    if (email === "") {
+      return error
+    }
+    if (date === Date.now()){
+      return error
+    }
     const passingData = {
       address,
       description,
@@ -209,10 +234,11 @@ export default function Profile() {
                           timeIntervals={30}
                           timeCaption="Time"
                           dateFormat="MMMM d, yyyy h:mm aa"
+                          minDate={new Date()}
                           className="input input-solid"
                         />
                       </div>
-                      <button onClick={submitData} className="btn btn-error btn-block">Add</button>
+                      <button onClick={submitData} className={`btn btn-error btn-block ${isFormValid() ? '' : 'disabled'}`} disabled={!isFormValid()}>Add</button>
 
                       <button className="btn btn-block">Cancel</button>
                     </form>
