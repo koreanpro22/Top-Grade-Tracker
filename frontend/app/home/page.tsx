@@ -45,20 +45,23 @@ interface User {
 }
 
 export default function Home() {
+  // const { userData, setUserData } : { userData: User, setUserData: any} = useGlobalContext();
   const { userData, setUserData } = useGlobalContext();
   const { user, error, isLoading } = useUser();
 
-  // useEffect(() => {
-  //   async function fetchData() {
-  //     try {
-  //       const fetchedUser = await fetchUser(user.email);
-  //       setUserData(fetchedUser);
-  //     } catch (err) {
-  //       console.log("Error has occured => ", err);
-  //     }
-  //   }
-  //   fetchData();
-  // }, [user]);
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const fetchedUser = await fetchUser(user.email);
+        setUserData(fetchedUser);
+        console.log('user logged in', user)
+        console.log('fetchedUser in useEffect => ', fetchedUser)
+      } catch (err) {
+        console.log("Error has occured => ", err);
+      }
+    }
+    fetchData();
+  }, [user]);
 
   const sortByDate = (jobs: Job[]) => {
     if (!jobs || jobs.length < 2) return jobs || [];
@@ -101,7 +104,7 @@ export default function Home() {
                     <div>{job.address}</div>
                   </div>
                   <div>
-                    {job.client.name} {job.client.phone}
+                    {job?.client?.name} {job?.client?.phone}
                   </div>
                   <div>{job.description}</div>
                 </div>
