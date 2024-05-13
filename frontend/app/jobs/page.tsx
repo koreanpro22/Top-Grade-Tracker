@@ -33,6 +33,21 @@ export default function Profile() {
   const [description, setDescription] = useState<string>('');
   const { userData, setUserData } = useGlobalContext();
   const { user, error, isLoading } = useUser();
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const fetchedUser = await fetchUser(user.email);
+        setUserData(fetchedUser);
+        console.log('user logged in', user)
+        console.log('fetchedUser in useEffect => ', fetchedUser)
+      } catch (err) {
+        console.log("Error has occured => ", err);
+      }
+    }
+    fetchData();
+  }, [user]);
+
   // useEffect(() => {
   //   async function fetchData() {
   //     try {
@@ -108,7 +123,7 @@ export default function Profile() {
     const passingData = {
       address,
       description,
-      userId: 1,
+      userId: userData.id,
       clientName: name,
       clientPhone: phone,
       scheduledDate: date,
