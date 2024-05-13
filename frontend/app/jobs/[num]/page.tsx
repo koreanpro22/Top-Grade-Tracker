@@ -115,8 +115,9 @@ const StreetViewPage: React.FC<StreetViewPageProps> = ({ job }) => {
       "jobId" : job.id
     }
 
-    const res = await createWarrenty(data);
-    console.log('res', res);
+    await createWarrenty(data);
+    window.location.href = "/";
+
   }
 
   const warrentyData3 = async () => {
@@ -125,8 +126,9 @@ const StreetViewPage: React.FC<StreetViewPageProps> = ({ job }) => {
       "jobId" : job.id
     }
 
-    const res = await createWarrenty(data);
-    console.log('res', res);
+    await createWarrenty(data);
+    window.location.href = "/";
+
   }
 
 
