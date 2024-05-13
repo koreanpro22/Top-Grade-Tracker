@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import NavBar from "../components/nav";
 import { createJob, fetchJobs, fetchUser } from "../components/dispatch";
@@ -85,7 +85,10 @@ export default function Profile() {
 
   const sortByDate = (jobs: Job[]) => {
     return jobs.sort((a, b) => {
-      return new Date(a.scheduledDate).getTime() - new Date(b.scheduledDate).getTime();
+      return (
+        new Date(a.scheduledDate).getTime() -
+        new Date(b.scheduledDate).getTime()
+      );
     });
   };
 
@@ -221,8 +224,17 @@ export default function Profile() {
               {sortByDate(jobs).map((job: Job) => (
                 <Link href={`/jobs/${job.id}`} key={job.id}>
                   <div className="flex justify-between mt-8">
-                    <div className="text-content2">DATE: {new Date(job.scheduledDate).toLocaleDateString()}</div>
-                    <div className="text-content2">TIME: {new Date(job.scheduledDate).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true })}</div>
+                    <div className="text-content2">
+                      DATE: {new Date(job.scheduledDate).toLocaleDateString()}
+                    </div>
+                    <div className="text-content2">
+                      TIME:{" "}
+                      {new Date(job.scheduledDate).toLocaleTimeString([], {
+                        hour: "numeric",
+                        minute: "2-digit",
+                        hour12: true,
+                      })}
+                    </div>
                   </div>
                   <div className="card">
                     <div className="card-body">

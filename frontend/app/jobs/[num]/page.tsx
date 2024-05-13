@@ -1,10 +1,13 @@
-'use client'
+"use client";
 
 import { useEffect, useState } from "react";
 import NavBar from "../../components/nav";
 import { fetchJob } from "../../components/dispatch";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPhone, faSms } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPhone, faSms } from "@fortawesome/free-solid-svg-icons";
+import { useUser } from "@auth0/nextjs-auth0/client";
+import { useGlobalContext } from "../context/store";
+import { redirect } from "next/navigation";
 
 import * as dotenv from "dotenv";
 
@@ -21,12 +24,10 @@ const loadScript = (url: string, callback: () => void) => {
   if (existingScript && callback) callback();
 };
 
-const Jobs = ({
-  params,
-}: {
-  params: { num: number }
-}) => {
+const Jobs = ({ params }: { params: { num: number } }) => {
   const [job, setJob] = useState<any>(null);
+  const { userData, setUserData } = useGlobalContext();
+  const { user, error, isLoading } = useUser();
   const { num } = params;
 
   useEffect(() => {
@@ -38,21 +39,22 @@ const Jobs = ({
   }, [num]);
   const YOUR_API_KEY: string = process.env.REACT_APP_YOUR_API_KEY as string;
 
-  console.log(YOUR_API_KEY, 'api key');
-  console.log(process.env, 'process dotenv');
+  console.log(YOUR_API_KEY, "api key");
+  console.log(process.env, "process dotenv");
   console.log(job);
   useEffect(() => {
     loadScript(`https://maps.googleapis.com/maps/api/js?key=AIzaSyDnKEeDUQ_wf2JhICaZYoSSzYi8SlaeaDI&libraries=places`, () => {
     });
   }, []);
 
+  if (isLoading) return <div className="container">Loading...</div>;
+  if (!user) redirect("/");
+
   return (
     <div className="container">
       <NavBar />
       <div>
-        <div>
-          {job && <StreetViewPage job={job} />}
-        </div>
+        <div>{job && <StreetViewPage job={job} />}</div>
       </div>
     </div>
   );
@@ -83,7 +85,10 @@ const StreetViewPage: React.FC<StreetViewPageProps> = ({ job }) => {
           disableDefaultUI: true,
         });
       } else {
-        console.error("Geocode was not successful for the following reason: ", status);
+        console.error(
+          "Geocode was not successful for the following reason: ",
+          status
+        );
       }
     });
   }, [job]);
@@ -140,6 +145,5 @@ const StreetViewPage: React.FC<StreetViewPageProps> = ({ job }) => {
     </div>
   );
 };
-
 
 export default Jobs;
