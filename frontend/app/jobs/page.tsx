@@ -1,13 +1,15 @@
 'use client'
 
 import NavBar from "../components/nav";
-import { fetchJobs } from "../components/dispatch";
+import { createJob, fetchJobs, fetchUser } from "../components/dispatch";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPhone, faSms } from '@fortawesome/free-solid-svg-icons';
 import DatePicker from "react-datepicker";
 import 'react-datepicker/dist/react-datepicker.css';
+import { useUser } from "@auth0/nextjs-auth0/client";
+import { useGlobalContext } from "../context/store";
 
 
 
@@ -29,6 +31,21 @@ export default function Profile() {
   const [phone, setPhone] = useState<string>('');
   const [address, setAddress] = useState<string>('');
   const [description, setDescription] = useState<string>('');
+  const { userData, setUserData } = useGlobalContext();
+  const { user, error, isLoading } = useUser();
+  // useEffect(() => {
+  //   async function fetchData() {
+  //     try {
+  //       const fetchedUser = await fetchUser(user.email);
+  //       setUserData(fetchedUser);
+  //       console.log('user logged in', user)
+  //       console.log('fetchedUser in useEffect => ', fetchedUser)
+  //     } catch (err) {
+  //       console.log("Error has occured => ", err);
+  //     }
+  //   }
+  //   fetchData();
+  // }, [user]);
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
@@ -83,7 +100,23 @@ export default function Profile() {
   //   window.open(uri);
   // };
 
-  console.log(jobs, 'jobs~~~~~~~~~~~~~~~~~');
+  const submitData = async () => {
+    console.log('clicked');
+    const passingData = {
+      address,
+      description,
+      userId: 1,
+      clientName: name,
+      clientPhone: phone,
+      scheduledDate: date,
+      clientEmail: email
+    };
+
+    const res = await createJob(passingData);
+    console.log('passed in', res);
+  };
+
+
 
   return (
     <div className="container">
@@ -176,18 +209,12 @@ export default function Profile() {
                           className="input input-solid"
                         />
                       </div>
+                      <button onClick={submitData} className="btn btn-error btn-block">Add</button>
 
-                      <div className="mt-4">
-                        <button type="button" className="rounded-lg btn btn-primary btn-block">Send Enquiry</button>
-                      </div>
+                      <button className="btn btn-block">Cancel</button>
                     </form>
                   </div>
                 </section>
-                <div className="flex gap-3">
-                  <button className="btn btn-error btn-block">Add</button>
-
-                  <button className="btn btn-block">Cancel</button>
-                </div>
               </div>
             </div>
             <div>
