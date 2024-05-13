@@ -44,7 +44,6 @@ interface User {
   job: Job[];
 }
 
-
 export default function Home() {
   // const { userData, setUserData } : { userData: User, setUserData: any} = useGlobalContext();
   const { userData, setUserData } = useGlobalContext();
@@ -74,9 +73,10 @@ export default function Home() {
     });
   };
 
-  if (isLoading) return <div className="container">Loading...</div>
-  if (!user) redirect('/');
-  
+  if (isLoading) return <div className="container">Loading...</div>;
+  if (!user) redirect("/");
+  console.log('userData ===> ', userData)
+  console.log('user ===> ', user)
   return (
     <div className="container">
       <NavBar />

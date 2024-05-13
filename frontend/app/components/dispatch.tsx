@@ -6,7 +6,13 @@ export const fetchUser = async (email: string | undefined) => {
   if (res.ok) {
     const data = await res.json();
     return data;
+  } else if (res.status < 500) {
+    const data = await res.json();
+    return data.errors
+  } else {
+    return res
   }
+
 };
 
 export const createJob = async (info: any) => {

@@ -6,7 +6,7 @@ import { fetchJob } from "../../components/dispatch";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPhone, faSms } from "@fortawesome/free-solid-svg-icons";
 import { useUser } from "@auth0/nextjs-auth0/client";
-import { useGlobalContext } from "../context/store";
+import { useGlobalContext } from "../../context/store";
 import { redirect } from "next/navigation";
 
 import * as dotenv from "dotenv";

@@ -14,11 +14,10 @@ export default function Login() {
     async function fetchData() {
       try {
         const fetchedUser = await fetchUser(user.email);
-        setUserData(fetchedUser || []);
+        setUserData(fetchedUser);
       } catch (err) {
         console.log("Error has occured => ", err);
-      } finally {
-      }
+      } 
     }
     fetchData();
     redirect("/home");
