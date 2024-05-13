@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import NavBar from "../../components/nav";
-import { fetchJob } from "../../components/dispatch";
+import { createWarrenty, fetchJob } from "../../components/dispatch";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPhone, faSms } from "@fortawesome/free-solid-svg-icons";
 import { useUser } from "@auth0/nextjs-auth0/client";
@@ -109,7 +109,25 @@ const StreetViewPage: React.FC<StreetViewPageProps> = ({ job }) => {
     window.open(uri, "_blank");
   }
 
+  const warrentyData1 = async () => {
+    const data = {
+      "duration" : 1,
+      "jobId" : job.id
+    }
 
+    const res = await createWarrenty(data);
+    console.log('res', res);
+  }
+
+  const warrentyData3 = async () => {
+    const data = {
+      "duration" : 3,
+      "jobId" : job.id
+    }
+
+    const res = await createWarrenty(data);
+    console.log('res', res);
+  }
 
 
 
@@ -124,9 +142,25 @@ const StreetViewPage: React.FC<StreetViewPageProps> = ({ job }) => {
         {job.description}
       </div>
       <div>
-          Warrenty Duration:
-          {" "}
-          {job.warrenties[0]?.duration ? job.warrenties[0].duration : "Add Warrenty"}
+        Warrenty Duration:
+        {" "}
+        {job.warrenties[0]?.duration ? job.warrenties[0].duration :
+          <span>
+            <label htmlFor="modal-1">Add Warrenty</label>
+            <input className="modal-state" id="modal-1" type="checkbox" />
+            <div className="modal">
+              <label className="modal-overlay" htmlFor="modal-1"></label>
+              <div className="modal-content flex flex-col gap-5">
+                <label htmlFor="modal-1" className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
+                <h2 className="text-xl">Add Warrenty</h2>
+                <span>1 Year Warrenty or 3 Year Warrenty</span>
+                <div className="flex gap-3">
+                  <button onClick={warrentyData1} className="btn btn-error btn-block">Add 1 Year Warrenty</button>
+
+                  <button onClick={warrentyData3} className="btn btn-primary btn-block">Add 3 Year Warrenty</button>
+                </div>
+              </div>
+            </div></span>}
       </div>
       <div className="flex justify-between">
         <div>
