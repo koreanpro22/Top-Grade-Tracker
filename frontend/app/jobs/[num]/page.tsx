@@ -193,7 +193,7 @@ const StreetViewPage: React.FC<StreetViewPageProps> = ({ job }) => {
               <div className="modal-content flex flex-col gap-5">
                 <label htmlFor="modal-1" className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
                 <h2 className="text-xl">Extend or Edit Warrenty</h2>
-                <span>1 Year Warrenty or 3 Year Warrenty</span>
+                <span> 1 Year Warrenty or 3 Year Warrenty</span>
                 <div className="flex w-full">
                   <button onClick={() => extendWarrenry(job.warrenties[0].id)} className="btn btn-error btn-block">Extend</button>
 
