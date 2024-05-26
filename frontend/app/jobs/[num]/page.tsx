@@ -161,7 +161,6 @@ const StreetViewPage: React.FC<StreetViewPageProps> = ({ job }) => {
       <div className="mt-8">
         Description
       </div>
-      <div className="text-red-100 text-xs mb-5">{job.address}</div>
       <div className="mb-5">
         {job.description}
       </div>
