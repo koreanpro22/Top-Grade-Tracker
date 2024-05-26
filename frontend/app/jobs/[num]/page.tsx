@@ -161,6 +161,11 @@ const StreetViewPage: React.FC<StreetViewPageProps> = ({ job }) => {
       <div className="mt-8">
         Description
       </div>
+      <div className="text-red-100 text-xs mb-5">{job.address}</div>
+      <div className="rounded border-opacity-5 shadow-outline" id="street-view-pano" style={{ width: "100%", height: "300px" }}></div>
+      <div className="mt-8">
+        Description
+      </div>
       <div className="mb-5">
         {job.description}
       </div>
