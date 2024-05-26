@@ -24,28 +24,6 @@ userRouter.post("/create", async (req: Request, res: Response) => {
   }
 });
 
-userRouter.post("/create", async (req: Request, res: Response) => {
-  const { name, email, password, profilePicture, isAdmin, phone } = req.body;
-
-  try {
-    const user = await db.user.create({
-      data: {
-        name,
-        email,
-        password,
-        profilePicture,
-        isAdmin,
-        phone,
-      },
-    });
-
-    res.json(user);
-  } catch (error) {
-    console.error("Error creating user:", error);
-    res.status(500).send("Error creating user");
-  }
-});
-
 userRouter.get("/getall", async (req: Request, res: Response) => {
   try {
     const users = await db.user.findMany();
