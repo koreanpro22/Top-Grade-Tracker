@@ -34,6 +34,7 @@ userRouter.get("/getall", async (req: Request, res: Response) => {
   }
 });
 
+
 userRouter.get("/:userEmail", async (req: Request, res: Response) => {
   try {
     const theUser = await db.user.findUnique({
