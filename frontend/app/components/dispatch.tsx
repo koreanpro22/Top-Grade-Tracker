@@ -65,6 +65,7 @@ export const fetchJobs = async () => {
         method: "GET"
     });
 
+    
     if (res.ok) {
         const data = await res.json();
         return data;
