@@ -58,6 +58,7 @@ export const editWarrenty = async(info:any, num:number) => {
     const data = await res.json()
     return data
   }
+  
 }
 
 export const fetchJobs = async () => {
