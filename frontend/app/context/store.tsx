@@ -46,13 +46,13 @@ type DataType = {
 };
 
 interface ContextProps {
-  userData: DataType[];
+  userData: DataType;
   setUserData: Dispatch<SetStateAction<DataType[]>>;
 }
 
 const GlobalContext = createContext<ContextProps>({
-  userData: [],
-  setUserData: (): DataType[] => [],
+  userData: {},
+  setUserData: (): DataType => {},
 });
 
 export const GlobalContextProvider = ({ children }) => {

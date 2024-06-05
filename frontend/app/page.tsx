@@ -9,18 +9,22 @@ import { useGlobalContext } from "./context/store";
 export default function Login() {
   const { userData, setUserData } = useGlobalContext();
   const { user, error, isLoading } = useUser();
+  console.log('user => ', userData)
+  // if (userData) redirect('/home')
 
   if (user) {
     async function fetchData() {
-      try {
-        const fetchedUser = await fetchUser(user.email);
-        setUserData(fetchedUser);
-      } catch (err) {
-        console.log("Error has occured => ", err);
-      } 
+      console.log('hitting inside fetch data')
+      const fetchedUser = await fetchUser(user.email);
+      setUserData(fetchedUser);
+      return
     }
-    fetchData();
-    redirect("/home");
+    try {
+      fetchData();
+    } catch (err) {
+        console.log("Error has occured => ", err);
+        return err
+      } 
   }
 
   if (isLoading) return <div className="container">Loading...</div>;

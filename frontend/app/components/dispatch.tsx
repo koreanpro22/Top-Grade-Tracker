@@ -2,15 +2,12 @@ export const fetchUser = async (email: string | undefined) => {
   const res = await fetch(`http://localhost:8000/api/users/${email}`, {
     method: "GET",
   });
-
+  console.log('res inside fetchUser dispatch ', res)
+  const data = await res.json();
   if (res.ok) {
-    const data = await res.json();
     return data;
-  } else if (res.status < 500) {
-    const data = await res.json();
-    return data.errors
   } else {
-    return res
+    throw new Error(data.statusText)
   }
 
 };
