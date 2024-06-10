@@ -16,8 +16,9 @@ Create env file
 ```
 cd backend
 npm install
-npx prisma migrate dev --name init
-
+npx prisma migrate dev --name init (for creating the first migration)
+prisma migrate dev --name added_job_title (for creating a new additional migration)
+npx prisma db seed
 npx prisma studio
 npm start
 ```
