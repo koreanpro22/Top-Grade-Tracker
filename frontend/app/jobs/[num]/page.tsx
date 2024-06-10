@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import NavBar from "../../components/nav";
-import { fetchJob } from "../../components/dispatch";
+import { createWarrenty, editWarrenty, fetchJob, fetchUser } from "../../components/dispatch";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPhone, faSms } from "@fortawesome/free-solid-svg-icons";
 import { useUser } from "@auth0/nextjs-auth0/client";
@@ -12,6 +12,7 @@ import { redirect } from "next/navigation";
 import * as dotenv from "dotenv";
 
 dotenv.config();
+
 
 const loadScript = (url: string, callback: () => void) => {
   const existingScript = document.querySelector(`script[src="${url}"]`);
@@ -26,8 +27,6 @@ const loadScript = (url: string, callback: () => void) => {
 
 const Jobs = ({ params }: { params: { num: number } }) => {
   const [job, setJob] = useState<any>(null);
-  const { userData, setUserData } = useGlobalContext();
-  const { user, error, isLoading } = useUser();
   const { num } = params;
 
   useEffect(() => {
@@ -39,16 +38,11 @@ const Jobs = ({ params }: { params: { num: number } }) => {
   }, [num]);
   const YOUR_API_KEY: string = process.env.REACT_APP_YOUR_API_KEY as string;
 
-  console.log(YOUR_API_KEY, "api key");
-  console.log(process.env, "process dotenv");
   console.log(job);
   useEffect(() => {
-    loadScript(`https://maps.googleapis.com/maps/api/js?key=AIzaSyDnKEeDUQ_wf2JhICaZYoSSzYi8SlaeaDI&libraries=places`, () => {
+    loadScript(`https://maps.googleapis.com/maps/api/js?key=${YOUR_API_KEY}&libraries=places`, () => {
     });
   }, []);
-
-  if (isLoading) return <div className="container">Loading...</div>;
-  if (!user) redirect("/");
 
   return (
     <div className="container">
@@ -66,6 +60,23 @@ interface StreetViewPageProps {
 
 
 const StreetViewPage: React.FC<StreetViewPageProps> = ({ job }) => {
+
+  const { userData, setUserData } = useGlobalContext();
+  const { user, error, isLoading } = useUser();
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const fetchedUser = await fetchUser(user.email);
+        setUserData(fetchedUser);
+        console.log('user logged in', user)
+        console.log('fetchedUser in useEffect => ', fetchedUser)
+      } catch (err) {
+        console.log("Error has occured => ", err);
+      }
+    }
+    fetchData();
+  }, [user]);
 
   useEffect(() => {
     if (!window.google) return;
@@ -109,7 +120,37 @@ const StreetViewPage: React.FC<StreetViewPageProps> = ({ job }) => {
     window.open(uri, "_blank");
   }
 
+  const warrentyData1 = async () => {
+    const data = {
+      "duration": 1,
+      "jobId": job.id
+    }
 
+    await createWarrenty(data);
+    window.location.href = "/";
+
+  }
+
+  const warrentyData3 = async () => {
+    const data = {
+      "duration": 3,
+      "jobId": job.id
+    }
+
+    await createWarrenty(data);
+    window.location.href = "/";
+
+  }
+
+  const extendWarrenry = async (num: number) => {
+    const data = {
+      "duration": job.warrenties[0].duration + 1,
+      "jobId": job.id
+    }
+
+    await editWarrenty(data, num);
+    window.location.href = "/";
+  }
 
 
 
@@ -124,9 +165,43 @@ const StreetViewPage: React.FC<StreetViewPageProps> = ({ job }) => {
         {job.description}
       </div>
       <div>
-          Warrenty Duration:
-          {" "}
-          {job.warrenties[0]?.duration ? job.warrenties[0].duration : "Add Warrenty"}
+        Warrenty Duration:
+        {" "}
+        {job.warrenties[0]?.duration ? job.warrenties[0].duration :
+          <span>
+            <label htmlFor="modal-1">Add Warrenty</label>
+            <input className="modal-state" id="modal-1" type="checkbox" />
+            <div className="modal">
+              <label className="modal-overlay" htmlFor="modal-1"></label>
+              <div className="modal-content flex flex-col gap-5">
+                <label htmlFor="modal-1" className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
+                <h2 className="text-xl">Add Warrenty</h2>
+                <span>1 Year Warrenty or 3 Year Warrenty</span>
+                <div className="flex gap-3">
+                  <button onClick={warrentyData1} className="btn btn-error btn-block">Add 1 Year Warrenty</button>
+
+                  <button onClick={warrentyData3} className="btn btn-primary btn-block">Add 3 Year Warrenty</button>
+                </div>
+              </div>
+            </div></span>}
+        {userData?.isAdmin && job?.warrenties?.length > 0 && (
+          <div>
+            <label htmlFor="modal-1">Extend or Edit Warranty</label>
+            <input className="modal-state" id="modal-1" type="checkbox" />
+            <div className="modal">
+              <label className="modal-overlay" htmlFor="modal-1"></label>
+              <div className="modal-content flex flex-col gap-5">
+                <label htmlFor="modal-1" className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
+                <h2 className="text-xl">Extend or Edit Warranty</h2>
+                <span>1 Year Warranty or 3 Year Warranty</span>
+                <div className="flex w-full">
+                  <button onClick={() => extendWarranty(job.warrenties[0].id)} className="btn btn-error btn-block">Extend</button>
+                  <button className="btn btn-primary btn-block">Edit</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
       <div className="flex justify-between">
         <div>
