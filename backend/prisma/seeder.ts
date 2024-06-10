@@ -1,6 +1,6 @@
-import { LargeNumberLike } from "crypto";
-import { db } from "../src/utils/db.server";
-import { Prisma } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
+
+let prisma = new PrismaClient();
 
 type User = {
   name: string;
@@ -10,16 +10,8 @@ type User = {
   phone: string;
 };
 
-type Client = {
-  name: string;
-  email: string;
-  phone: string;
-  address: string;
-};
-
 type Job = {
   description: string;
-  clientId: number;
   userId: number;
   address: string;
 };
@@ -66,6 +58,20 @@ function getUsers(): Array<User> {
       isAdmin: true,
       phone: "123 456 7890",
     },
+    {
+      name: "David Kim",
+      email: "dhskim22@gmail.com",
+      password: "abc123!",
+      isAdmin: true,
+      phone: "139 730 8185",
+    },
+    {
+      email: "bao4ltyfe@gmail.com",
+      name: "bao",
+      password: "123Abc",
+      isAdmin: true,
+      phone: "123-231-3344",
+    },
   ];
 }
 
@@ -73,25 +79,21 @@ function getJobs(): Array<Job> {
   return [
     {
       description: "Pests",
-      clientId: 1,
       userId: 1,
       address: "21 park place",
     },
     {
       description: "Termite",
-      clientId: 1,
       userId: 2,
       address: "21 park place",
     },
     {
       description: "Termite",
-      clientId: 2,
       userId: 3,
       address: "90 smith street",
     },
     {
       description: "Ants",
-      clientId: 2,
       userId: 4,
       address: "90 smith street",
     },
@@ -108,20 +110,26 @@ function getWarrenties(): Array<Warrenty> {
 }
 
 async function main() {
-  await Promise.all(
-    getUsers().map((user) => {
-      const { name, email, password, isAdmin, phone } = user;
-      db.user.create({
-        data: {
-          name,
-          email,
-          password,
-          isAdmin,
-          phone,
-        },
-      });
-    })
-  );
+  await prisma.warrenty.deleteMany()
+  await prisma.job.deleteMany()
+  await prisma.user.deleteMany()
+
+  const users = await prisma.user.createMany({
+    data: getUsers(),
+  });
+  const jobs = await prisma.job.createMany({
+    data: getJobs(),
+  });
+  const warrenties = await prisma.warrenty.createMany({
+    data: getWarrenties(),
+  });
 }
 
-main();
+main()
+  .catch((e) => {
+    console.log(e);
+    process.exit(1);
+  })
+  .finally(() => {
+    prisma.$disconnect();
+  });
