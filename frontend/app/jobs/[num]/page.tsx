@@ -122,8 +122,8 @@ const StreetViewPage: React.FC<StreetViewPageProps> = ({ job }) => {
 
   const warrentyData1 = async () => {
     const data = {
-      "duration" : 1,
-      "jobId" : job.id
+      "duration": 1,
+      "jobId": job.id
     }
 
     await createWarrenty(data);
@@ -133,8 +133,8 @@ const StreetViewPage: React.FC<StreetViewPageProps> = ({ job }) => {
 
   const warrentyData3 = async () => {
     const data = {
-      "duration" : 3,
-      "jobId" : job.id
+      "duration": 3,
+      "jobId": job.id
     }
 
     await createWarrenty(data);
@@ -142,7 +142,7 @@ const StreetViewPage: React.FC<StreetViewPageProps> = ({ job }) => {
 
   }
 
-  const extendWarrenry = async(num:number) => {
+  const extendWarrenry = async (num: number) => {
     const data = {
       "duration": job.warrenties[0].duration + 1,
       "jobId": job.id
@@ -184,22 +184,24 @@ const StreetViewPage: React.FC<StreetViewPageProps> = ({ job }) => {
                 </div>
               </div>
             </div></span>}
-            {userData?.isAdmin &&
-            <div>
-            <label htmlFor="modal-1">Extend or Edit Warrenty</label>
+        {userData?.isAdmin && job?.warrenties?.length > 0 && (
+          <div>
+            <label htmlFor="modal-1">Extend or Edit Warranty</label>
             <input className="modal-state" id="modal-1" type="checkbox" />
             <div className="modal">
               <label className="modal-overlay" htmlFor="modal-1"></label>
               <div className="modal-content flex flex-col gap-5">
                 <label htmlFor="modal-1" className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
-                <h2 className="text-xl">Extend or Edit Warrenty</h2>
-                <span> 1 Year Warrenty or 3 Year Warrenty</span>
+                <h2 className="text-xl">Extend or Edit Warranty</h2>
+                <span>1 Year Warranty or 3 Year Warranty</span>
                 <div className="flex w-full">
-                  <button onClick={() => extendWarrenry(job.warrenties[0].id)} className="btn btn-error btn-block">Extend</button>
+                  <button onClick={() => extendWarranty(job.warrenties[0].id)} className="btn btn-error btn-block">Extend</button>
                   <button className="btn btn-primary btn-block">Edit</button>
                 </div>
               </div>
-            </div></div>}
+            </div>
+          </div>
+        )}
       </div>
       <div className="flex justify-between">
         <div>

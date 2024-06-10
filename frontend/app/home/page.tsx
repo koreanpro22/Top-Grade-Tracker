@@ -7,6 +7,7 @@ import { useUser } from "@auth0/nextjs-auth0/client";
 import React from "react";
 import { useGlobalContext } from "../context/store";
 import { redirect } from "next/navigation";
+import Link from "next/link";
 
 interface Job {
   id: number;
@@ -44,6 +45,7 @@ interface User {
   job: Job[];
 }
 
+
 export default function Home() {
   // const { userData, setUserData } : { userData: User, setUserData: any} = useGlobalContext();
   const { userData, setUserData } = useGlobalContext();
@@ -73,10 +75,9 @@ export default function Home() {
     });
   };
 
-  if (isLoading) return <div className="container">Loading...</div>;
-  if (!user) redirect("/");
-  console.log('userData ===> ', userData)
-  console.log('user ===> ', user)
+  if (isLoading) return <div className="container">Loading...</div>
+  if (!user) redirect('/');
+
   return (
     <div className="container">
       <NavBar />
@@ -88,7 +89,7 @@ export default function Home() {
             <div>Your Jobs</div>
             <div>
               {sortByDate(userData.job).map((job: Job) => (
-                <div key={job.id}>
+                <Link href={`/jobs/${job.id}`} key={job.id}>
                   <div>
                     <div>
                       DATE: {new Date(job.scheduledDate).toLocaleDateString()}
@@ -107,7 +108,7 @@ export default function Home() {
                     {job?.client?.name} {job?.client?.phone}
                   </div>
                   <div>{job.description}</div>
-                </div>
+                </Link>
               ))}
             </div>
           </div>
