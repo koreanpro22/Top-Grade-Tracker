@@ -61,8 +61,16 @@ export default function Profile() {
     setPhone(e.target.value);
   };
 
-  const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setAddress(e.target.value);
+  const handleStreetChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setStreet(e.target.value);
+  };
+
+  const handleCityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCity(e.target.value);
+  };
+
+  const handleStateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setState(e.target.value);
   };
 
   const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -78,7 +86,7 @@ export default function Profile() {
   };
 
   const isFormValid = () => {
-    return name.trim() !== "" && email.trim() !== "" && phone.trim() !== "" && address.trim() !== "" && description.trim() !== "";
+    return name.trim() !== "" && email.trim() !== "" && phone.trim() !== "" && street.trim() !== "" && city.trim() !== "" && state.trim() !== "" && description.trim() !== "";
   };
 
   useEffect(() => {
@@ -217,7 +225,7 @@ export default function Profile() {
                             type="text"
                             id="address"
                             value={street}
-                            onChange={handleAddressChange}
+                            onChange={handleStreetChange}
                           />
                         </div>
 
@@ -225,11 +233,11 @@ export default function Profile() {
                           <label className="sr-only" htmlFor="address">City</label>
                           <input
                             className="input input-solid"
-                            placeholder="Address"
+                            placeholder="City"
                             type="text"
-                            id="address"
+                            id="city"
                             value={city}
-                            onChange={handleAddressChange}
+                            onChange={handleCityChange}
                           />
                         </div>
 
@@ -237,11 +245,11 @@ export default function Profile() {
                           <label className="sr-only" htmlFor="address">State</label>
                           <input
                             className="input input-solid"
-                            placeholder="Address"
+                            placeholder="State"
                             type="text"
-                            id="address"
+                            id="state"
                             value={state}
-                            onChange={handleAddressChange}
+                            onChange={handleStateChange}
                           />
                         </div>
                       </div>
