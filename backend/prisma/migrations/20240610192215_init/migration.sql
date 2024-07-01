@@ -1,6 +1,3 @@
--- CreateEnum
-CREATE TYPE "Role" AS ENUM ('EMPLOYEE', 'BOSS');
-
 -- CreateTable
 CREATE TABLE "User" (
     "id" SERIAL NOT NULL,
@@ -8,30 +5,22 @@ CREATE TABLE "User" (
     "name" TEXT,
     "password" TEXT NOT NULL,
     "profilePicture" TEXT,
-    "role" "Role" NOT NULL DEFAULT 'EMPLOYEE',
+    "isAdmin" BOOLEAN NOT NULL,
     "phone" TEXT NOT NULL,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "Client" (
-    "id" SERIAL NOT NULL,
-    "name" TEXT NOT NULL,
-    "email" TEXT NOT NULL,
-    "phone" TEXT NOT NULL,
-    "address" TEXT,
-
-    CONSTRAINT "Client_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
 CREATE TABLE "Job" (
     "id" SERIAL NOT NULL,
-    "clientId" INTEGER NOT NULL,
+    "clientName" TEXT,
+    "clientEmail" TEXT,
+    "clientPhone" TEXT,
     "userId" INTEGER NOT NULL,
     "description" TEXT NOT NULL,
     "address" TEXT NOT NULL,
+    "scheduledDate" TIMESTAMP(3),
 
     CONSTRAINT "Job_pkey" PRIMARY KEY ("id")
 );
@@ -48,15 +37,6 @@ CREATE TABLE "Warrenty" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Client_email_key" ON "Client"("email");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Job_clientId_key" ON "Job"("clientId");
-
--- AddForeignKey
-ALTER TABLE "Job" ADD CONSTRAINT "Job_clientId_fkey" FOREIGN KEY ("clientId") REFERENCES "Client"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Job" ADD CONSTRAINT "Job_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
