@@ -36,8 +36,8 @@ const Jobs = ({ params }: { params: { num: number } }) => {
     };
     fetchData();
   }, [num]);
-  const YOUR_API_KEY: string = process.env.REACT_APP_YOUR_API_KEY as string;
-
+  let YOUR_API_KEY: string = process.env.REACT_APP_YOUR_API_KEY as string;
+  YOUR_API_KEY = 'AIzaSyDnKEeDUQ_wf2JhICaZYoSSzYi8SlaeaDI'
   console.log(job);
   useEffect(() => {
     loadScript(`https://maps.googleapis.com/maps/api/js?key=${YOUR_API_KEY}&libraries=places`, () => {

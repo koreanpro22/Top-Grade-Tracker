@@ -29,7 +29,9 @@ export default function Profile() {
   const [name, setName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [phone, setPhone] = useState<string>('');
-  const [address, setAddress] = useState<string>('');
+  const [street, setStreet] = useState<string>('');
+  const [city, setCity] = useState<string>('');
+  const [state, setState] = useState<string>('');
   const [description, setDescription] = useState<string>('');
   const { userData, setUserData } = useGlobalContext();
   const { user, error, isLoading } = useUser();
@@ -109,9 +111,16 @@ export default function Profile() {
 
   const submitData = async () => {
     console.log('clicked');
-    if (address === "") {
+    if (street === "") {
       return error
     }
+    if (city === "") {
+      return error
+    }
+    if (state === "") {
+      return error
+    }
+    const address = `${street}, ${city}, ${state}`
     if (description === "") {
       return error
     }
@@ -207,7 +216,31 @@ export default function Profile() {
                             placeholder="Address"
                             type="text"
                             id="address"
-                            value={address}
+                            value={street}
+                            onChange={handleAddressChange}
+                          />
+                        </div>
+
+                        <div>
+                          <label className="sr-only" htmlFor="address">City</label>
+                          <input
+                            className="input input-solid"
+                            placeholder="Address"
+                            type="text"
+                            id="address"
+                            value={city}
+                            onChange={handleAddressChange}
+                          />
+                        </div>
+
+                        <div>
+                          <label className="sr-only" htmlFor="address">State</label>
+                          <input
+                            className="input input-solid"
+                            placeholder="Address"
+                            type="text"
+                            id="address"
+                            value={state}
                             onChange={handleAddressChange}
                           />
                         </div>
